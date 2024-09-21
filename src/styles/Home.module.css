@@ -1,0 +1,17 @@
+.homeContainer {
+  min-height: 100vh; /* Equivalent to min-h-screen */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(to bottom, #005ed26c, #e0e7ff, #ff37a54e); /* Replace with your gradient */
+  color: #4b5563; /* text-gray-800 */
+  padding: 2rem; /* p-8 */
+  gap: 4rem; /* gap-16 */
+}
+
+@media (min-width: 640px) {
+  .homeContainer {
+    padding: 5rem; /* sm:p-20 */
+  }
+}

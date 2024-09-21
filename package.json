@@ -9,16 +9,23 @@
     "seed": "ts-node prisma/seed.ts",
     "lint": "next lint"
   },
+  "resolutions": {
+    "graphql": "16.9.0"
+  },
   "prisma": {
     "schema": "./prisma/schema.prisma"
   },
   "dependencies": {
     "@apollo/client": "^3.11.8",
+    "@graphql-tools/schema": "^10.0.6",
+    "@graphql-tools/utils": "^10.5.4",
     "@prisma/client": "^5.19.1",
+    "@supabase/supabase-js": "^2.45.4",
     "apollo-server-micro": "^3.13.0",
     "autoprefixer": "^10.4.20",
     "dotenv": "^16.4.5",
-    "graphql": "^16.9.0",
+    "graphql": "16.9.0",
+    "graphql-subscriptions": "^2.0.0",
     "http": "0.0.1-security",
     "micro": "^9.4.1",
     "next": "^14.2.11",
@@ -27,12 +34,14 @@
     "react-dom": "^18.3.1",
     "socket.io": "^4.7.5",
     "socket.io-client": "^4.7.5",
+    "subscriptions-transport-ws": "^0.11.0",
     "ws": "^8.18.0"
   },
   "devDependencies": {
     "@types/node": "^20.16.5",
     "@types/react": "^18.3.6",
     "@types/react-dom": "^18.3.0",
+    "@types/uuid": "^10.0.0",
     "postcss": "^8.4.47",
     "tailwindcss": "^3.4.11",
     "ts-node": "^10.9.2",

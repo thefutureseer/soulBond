@@ -1,28 +1,38 @@
 generator client {
-  provider = "prisma-client-js"
+  provider = "prisma-client-js" // Generates the Prisma Client for database access
 }
 
 datasource db {
-  provider  = "postgresql"
-  url       = env("DATABASE_URL")
-  directUrl = env("DIRECT_URL")
+  provider  = "postgresql"       // Specifies PostgreSQL as the database provider
+  url       = env("DATABASE_URL") // Connection string for the database
+  directUrl = env("DIRECT_URL")  // Direct URL for connecting to the database, if needed
 }
 
 model user {
-  id        String      @id @default(uuid())
-  name      String
-  promises  promise[]
-  createdAt DateTime    @default(now())
-  updatedAt DateTime    @updatedAt
+  id        String      @id @default(uuid())    // Primary key, using UUIDs for uniqueness
+  name      String                               // The user's name
+  email     String      @unique                 // Unique email address for the user
+  edits     promise[]                           // One-to-many relationship: A user can make many edits
+  createdAt DateTime    @default(now())         // Timestamp for when the user was created
+  updatedAt DateTime    @updatedAt              // Automatically updated timestamp for when the user was last updated
 }
 
+// Promise model: Represents the promise history/versions of document edits
 model promise {
-  id         String      @id @default(uuid())
-  title      String
-  description String
-  creator_id String
-  creator    user      @relation(fields: [creator_id], references: [id])
-  createdAt DateTime    @default(now())
-  updatedAt DateTime    @updatedAt
-  status     String    @default("pending") // pending, completed, broken
+  id          String      @id @default(uuid())   // Primary key
+  title       String                              // Title of the promise
+  description String                              // Description or content of the promise edit
+  editedBy    user       @relation(fields: [editedById], references: [id]) // Many-to-one relationship with user
+  editedById  String                              // Foreign key linking to user
+  version     Int        @default(1)              // Version number of this edit
+  createdAt   DateTime   @default(now())         // Timestamp for when the promise was created
+  updatedAt   DateTime   @updatedAt              // Automatically updated timestamp for the last update
+  status      status_us  @default(PENDING)       // Using enum for better validation
+}
+
+// Enum for status
+enum status_us {
+  PENDING
+  COMPLETED
+  BROKEN
 }

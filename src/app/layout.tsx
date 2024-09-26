@@ -1,3 +1,4 @@
+// "use client";
 import type { Metadata } from 'next';
 import ClientApolloProvider from './providers/ClientApolloProvider';
 import "./globals.css";

@@ -1,3 +1,3 @@
-import typeDefs from "./typedefs";
+import typeDefs from "./typeDefs";
 
 export default typeDefs;

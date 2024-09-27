@@ -1,30 +1,43 @@
+// src/graphql/promises.ts
 import { gql } from '@apollo/client';
+import { CreatePromiseInput } from '../app/types/graphql';
 
+// Define the CREATE_PROMISE mutation
 export const CREATE_PROMISE = gql`
-  mutation CreatePromise($title: String!, $description: String!, $creatorId: ID!) {
-    createPromise(title: $title, description: $description, creatorId: $creatorId) {
+  mutation CreatePromise($input: CreatePromiseInput!) {
+    createPromise(input: $input) {
       id
       title
       description
-      creator {
+      editedBy {
         id
         name
+        email
       }
+      editedById
+      version
+      createdAt
+      updatedAt
       status
     }
   }
 `;
 
+// Define the GET_PROMISES query
 export const GET_PROMISES = gql`
   query GetPromises {
     getPromises {
       id
       title
       description
-      creator {
+      editedBy {
         id
         name
       }
+      editedById
+      version
+      createdAt
+      updatedAt
       status
     }
   }

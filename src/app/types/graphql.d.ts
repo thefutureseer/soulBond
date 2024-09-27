@@ -1,43 +1,64 @@
-declare module 'graphql-schema' {
+//create types for typeScript
+export enum StatusUs {
+  PENDING = "PENDING",
+  COMPLETED = "COMPLETED",
+  BROKEN = "BROKEN",
+}
 
-  // Type for getting promises, following camelCase for field names
-  export type GetPromisesData = {
-    getPromises: Array<{
-      id: string;
-      title: string;
-      description: string;
-      status: string;
-    }>;
-  };
+export type User = {
+  id: string;
+  name: string;
+  email: string;
+  edits: PromiseType[]; // Array of related promises
+  createdAt: Date;
+  updatedAt: Date;
+};
 
-  // Type for User, again using camelCase for field names
-  export type User = {
-    id: string;
-    name: string;
-    promises: Promise[]; // User has an array of promises
-  };
+export type PromiseType = {
+  id: string;
+  title: string;
+  description: string;
+  editedBy: User; // User who edited the promise
+  editedById: string;
+  version: number;
+  createdAt: Date;
+  updatedAt: Date;
+  status: StatusUs; // Enum value for status
+};
 
-  // Type for Promise, ensuring PascalCase for type and camelCase for fields
-  export type Promise = {
-    id: string;
-    title: string;
-    description: string;
-    status: string;
-    creator: User; // Reference to the creator (User type)
-  };
+export type CreatePromiseResponse = {
+  createPromise: PromiseType; // The promise that was created
+};
 
-  // Query definitions for GraphQL queries
-  export type Query = {
-    getUsers: User[]; // Fetches an array of users
-    getUser: (id: string) => User | null; // Fetch a single user by ID
-    getPromises: Promise[]; // Fetches an array of promises
-    getPromise: (id: string) => Promise | null; // Fetch a single promise by ID
-  };
+export type CreateUserInput = {
+  name: string;
+  email: string;
+};
 
-  // Mutation definitions for GraphQL mutations
-  export type Mutation = {
-    createUser: (name: string) => User; // Create a new user
-    createPromise: (title: string, description: string, creatorId: string) => Promise; // Create a new promise
-    updatePromise: (id: string, title?: string, description?: string, status?: string) => Promise; // Update an existing promise
+export type CreatePromiseInput = {
+  input: {
+    title: string;        // Title of the promise
+    description: string;  // Description of the promise
+    editedById: string;   // ID of the user who edited the promise
   };
+};
+
+export type UpdatePromiseInput = {
+  id: string;
+  title?: string;
+  description?: string;
+  status?: StatusUs;
+};
+
+export type Query = {
+  getUsers: User[]; // Fetches an array of users
+  getUser: (id: string) => User | null; // Fetch a single user by ID
+  getPromises: PromiseType[]; // Fetches an array of promises
+  getPromise: (id: string) => PromiseType | null; // Fetch a single promise by ID
+};
+
+export type Mutation = {
+  createUser: (input: CreateUserInput) => User; // Create a new user
+  createPromise: (input: CreatePromiseInput) => PromiseType; // Create a new promise
+  updatePromise: (input: UpdatePromiseInput) => PromiseType; // Update an existing promise
 };

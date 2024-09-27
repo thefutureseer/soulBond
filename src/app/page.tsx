@@ -1,5 +1,6 @@
-import PromiseForm from 'components/PromiseForm';
-import PromiseList from 'components/PromiseList';
+"use client";
+import PromiseForm from '../app/components/PromiseForm';
+import PromiseList from '../app/components/PromiseList';
 
 const Home = () => {
   return (

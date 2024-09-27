@@ -1,40 +1,64 @@
 import { gql } from 'apollo-server-micro';
 
-// Define your GraphQL schema
+ 
+// Define type definitions using GraphQL SDL
 const typeDefs = gql`
-  type User {
-    id: ID!
-    name: String!
-    email: String!
-    edits: [Promise!]!
-    createdAt: String!
-    updatedAt: String!
-  }
-
-  type Promise {
-    id: ID!
-    title: String!
-    description: String!
-    editedBy: User!
-    version: Int!
-    createdAt: String!
-    updatedAt: String!
-    status: StatusUs!
-  }
-
   enum StatusUs {
     PENDING
     COMPLETED
     BROKEN
   }
 
+  type User {
+    id: ID!
+    name: String!
+    email: String!
+    edits: [PromiseType!]!
+    createdAt: String!
+    updatedAt: String!
+  }
+
+  type PromiseType {
+    id: ID!
+    title: String!
+    description: String!
+    editedBy: User!
+    editedById: String!
+    version: Int!
+    createdAt: String!
+    updatedAt: String!
+    status: StatusUs!
+  }
+
+  input CreateUserInput {
+    name: String!
+    email: String!
+  }
+
+  input CreatePromiseInput {
+    title: String!
+    description: String!
+    editedById: String!
+  }
+
+  input UpdatePromiseInput {
+    id: ID!
+    title: String
+    description: String
+    status: StatusUs
+  }
+
   type Query {
-    users: [User!]!
-    promises: [Promise!]!
+    getUsers: [User!]!
+    getUser(id: ID!): User
+    getPromises: [PromiseType!]!
+    getPromise(id: ID!): PromiseType
   }
 
   type Mutation {
-    createPromise(title: String!, description: String!, editedById: String!): Promise!
+    createUser(input: CreateUserInput!): User!
+    createPromise(input: CreatePromiseInput!): PromiseType!
+    updatePromise(input: UpdatePromiseInput!): PromiseType!
   }
 `;
 

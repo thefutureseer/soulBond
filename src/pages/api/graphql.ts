@@ -1,53 +1,54 @@
+// pages/api/graphql.ts
 import { ApolloServer } from 'apollo-server-micro';
 import typeDefs from '../../graphql/schema/index';
 import resolvers from '../../graphql/resolvers/index';
-import type { NextApiRequest, NextApiResponse } from 'next'; // Importing types for request and response
-import Cors from 'cors';
+import type { NextApiRequest, NextApiResponse } from 'next';
 
-const cors = Cors({
-  origin: 'https://soulbond-u4ynixe6j-thefutureseers-projects.vercel.app', // Specify the allowed origin
-  methods: ['POST', 'GET', 'OPTIONS'], // Specify allowed methods
-  allowedHeaders: ['Content-Type'], // Specify allowed headers
-})
+const allowedOrigins = [
+  'https://soulbond.vercel.app/',
+  'http://localhost:3000', // development URL
+];
 
-// Initialize the Apollo Server
 const apolloServer = new ApolloServer({
   typeDefs,
   resolvers,
-  introspection: true, // Enables schema introspection
-  plugins: [
-    // Enables the GraphQL Playground
-    require('apollo-server-core').ApolloServerPluginLandingPageGraphQLPlayground(),
-  ],
 });
 
 export const config = {
   api: {
-    bodyParser: false, // Required for Apollo Server
+    bodyParser: false,
   },
 };
 
-// Start the server
 const startServer = apolloServer.start();
 
-// Middleware to run CORS
-const runMiddleware = (req: NextApiRequest, res: NextApiResponse, fn: any) =>
-  new Promise((resolve, reject) => {
-    fn(req, res, (result: any) => {
-      if (result instanceof Error) return reject(result);
-      resolve(result);
-    });
-  });
-
-// Export default async function to handle requests
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  await runMiddleware(req, res, cors); // Run the CORS middleware
+  await startServer;
+
+  const origin = req.headers.origin;
+
+  if (req.method === 'OPTIONS') {
+    res.setHeader('Access-Control-Allow-Credentials', 'true');
+    res.setHeader('Access-Control-Allow-Origin', origin && allowedOrigins.includes(origin) ? origin : '');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+    res.end();
+    return;
+  }
+
+  // Set the Access-Control-Allow-Origin for all other requests
+  if (origin && typeof origin === 'string' && allowedOrigins.includes(origin)) {
+    res.setHeader('Access-Control-Allow-Origin', origin);
+  } else {
+    res.setHeader('Access-Control-Allow-Origin', ''); // Deny access for other origins
+  }
 
   try {
-    await startServer; // Ensure the server is started
-    return apolloServer.createHandler({ path: '/api/graphql' })(req, res);
+    return apolloServer.createHandler({
+      path: '/api/graphql',
+    })(req, res);
   } catch (error) {
-    console.error('Error starting Apollo Server:', error);
+    console.error('Error handling request:', error);
     res.status(500).send('Internal Server Error');
   }
-}
+};

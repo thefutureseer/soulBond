@@ -3,15 +3,20 @@ import { ApolloServer } from 'apollo-server-micro';
 import typeDefs from '../../graphql/schema/index';
 import resolvers from '../../graphql/resolvers/index';
 import type { NextApiRequest, NextApiResponse } from 'next';
+import { Context } from '../../app/types/context';
+import prisma from '../../app/utils/prisma';
 
 const allowedOrigins = [
-  'https://soulbond.vercel.app/',
+  'https://soulbond.vercel.app',
   'http://localhost:3000', // development URL
 ];
 
 const apolloServer = new ApolloServer({
   typeDefs,
   resolvers,
+  context: ({ req }): Context => {
+   return {prisma};
+  }
 });
 
 export const config = {

@@ -1,6 +1,5 @@
 import { gql } from 'apollo-server-micro';
 
- 
 // Define type definitions using GraphQL SDL
 const typeDefs = gql`
   enum StatusUs {
@@ -13,7 +12,7 @@ const typeDefs = gql`
     id: ID!
     name: String!
     email: String!
-    edits: [PromiseType!]!
+    edits: [PromiseType!]! # Promises edited by this user
     createdAt: String!
     updatedAt: String!
   }
@@ -22,8 +21,8 @@ const typeDefs = gql`
     id: ID!
     title: String!
     description: String!
-    editedBy: User!
-    editedById: String!
+    editedBy: User!          # User who last edited this promise
+    editedById: String!      # ID of the user who last edited
     version: Int!
     createdAt: String!
     updatedAt: String!
@@ -38,7 +37,7 @@ const typeDefs = gql`
   input CreatePromiseInput {
     title: String!
     description: String!
-    editedById: String!
+    editedById: String! # ID of the user creating the promise
   }
 
   input UpdatePromiseInput {
@@ -46,6 +45,7 @@ const typeDefs = gql`
     title: String
     description: String
     status: StatusUs
+    editedById: String! # ID of the user making the edit
   }
 
   type Query {

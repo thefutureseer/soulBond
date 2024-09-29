@@ -1,25 +1,33 @@
-import prisma from '../../app/utils/prisma';
+import { Context } from '../../app/types/context';
+import { StatusUs } from '../../app/types/graphql'
 
 const resolvers = {
   Query: {
     // Fetch all users
-    getUsers: async () => {
+    getUsers: async (_: unknown, __: unknown, context: Context) => {
+      const { prisma } = context;
       return await prisma.user.findMany();
     },
+    
     // Fetch a single user by ID
-    getUser: async (_: any, { id }: { id: string }) => {
+    getUser: async (_: unknown, { id }: { id: string }, context: Context) => {
+      const { prisma } = context;
       return await prisma.user.findUnique({ where: { id } });
     },
+    
     // Fetch all promises
-    getPromises: async () => {
+    getPromises: async (_: unknown, __: unknown, context: Context) => {
+      const { prisma } = context;
       return await prisma.promise.findMany({
         include: {
           editedBy: true, // Include user information for each promise
         },
       });
     },
+    
     // Fetch a single promise by ID
-    getPromise: async (_: any, { id }: { id: string }) => {
+    getPromise: async (_: unknown, { id }: { id: string }, context: Context) => {
+      const { prisma } = context;
       return await prisma.promise.findUnique({
         where: { id },
         include: {
@@ -31,7 +39,8 @@ const resolvers = {
 
   Mutation: {
     // Create a new user
-    createUser: async (_: any, { input }: { input: { name: string; email: string } }) => {
+    createUser: async (_: unknown, { input }: { input: { name: string; email: string } }, context: Context) => {
+      const { prisma } = context;
       return await prisma.user.create({
         data: {
           name: input.name,
@@ -39,32 +48,49 @@ const resolvers = {
         },
       });
     },
+    
     // Create a new promise
-    createPromise: async (_: any, { input }: { input: { title: string; description: string; editedById: string } }) => {
+    createPromise: async (_: unknown, { input }: { input: { title: string; description: string; editedById: string } }, context: Context) => {
+      const { prisma } = context;
       return await prisma.promise.create({
         data: {
           title: input.title,
           description: input.description,
-          editedBy: { connect: { id: input.editedById } },
-        },
+          editedBy: { connect: { id: input.editedById } }
+              },
       });
     },
+    
     // Update an existing promise
-    updatePromise: async (_: any, { input }: { input: { id: string; title?: string; description?: string; status?: string } }) => {
+    updatePromise: async (_: unknown, { input }: { input: { id: string; title?: string; description?: string; status?: string; editedById: string } }, context: Context) => {
+      const { prisma } = context;
+            // Determine if status is a valid StatusUs enum
+      const status = input.status as StatusUs | undefined; // Cast to StatusUs if it exists
+
       return await prisma.promise.update({
         where: { id: input.id },
         data: {
           title: input.title || undefined,
           description: input.description || undefined,
-          // status: input.status || undefined,
+          status: status,
+          editedById: input.editedById, // Set the ID of the user making the edit
         },
       });
     },
   },
 
-  // Resolve the `editedBy` field for PromiseType
+  User: {
+    // Resolve the `edits` field for User
+    edits: async (parent: any, _: any, { prisma }: Context) => {
+      return await prisma.promise.findMany({
+        where: { editedById: parent.id }, // Fetch promises edited by this user
+      });
+    },
+  },
+
   PromiseType: {
-    editedBy: async (parent: any) => {
+    // Resolve the `editedBy` field for PromiseType
+    editedBy: async (parent: any, _: any, { prisma }: Context) => {
       return await prisma.user.findUnique({ where: { id: parent.editedById } });
     },
   },

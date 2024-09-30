@@ -18,7 +18,7 @@ const resolvers = {
     // Fetch all promises
     getPromises: async (_: unknown, __: unknown, context: Context) => {
       const { prisma } = context;
-      return await prisma.promise.findMany({
+      return await prisma.soulpromise.findMany({
         include: {
           editedBy: true, // Include user information for each promise
         },
@@ -28,7 +28,7 @@ const resolvers = {
     // Fetch a single promise by ID
     getPromise: async (_: unknown, { id }: { id: string }, context: Context) => {
       const { prisma } = context;
-      return await prisma.promise.findUnique({
+      return await prisma.soulpromise.findUnique({
         where: { id },
         include: {
           editedBy: true, // Include user information for the promise
@@ -52,7 +52,7 @@ const resolvers = {
     // Create a new promise
     createPromise: async (_: unknown, { input }: { input: { title: string; description: string; editedById: string } }, context: Context) => {
       const { prisma } = context;
-      return await prisma.promise.create({
+      return await prisma.soulpromise.create({
         data: {
           title: input.title,
           description: input.description,
@@ -67,7 +67,7 @@ const resolvers = {
             // Determine if status is a valid StatusUs enum
       const status = input.status as StatusUs | undefined; // Cast to StatusUs if it exists
 
-      return await prisma.promise.update({
+      return await prisma.soulpromise.update({
         where: { id: input.id },
         data: {
           title: input.title || undefined,
@@ -82,7 +82,7 @@ const resolvers = {
   User: {
     // Resolve the `edits` field for User
     edits: async (parent: any, _: any, { prisma }: Context) => {
-      return await prisma.promise.findMany({
+      return await prisma.soulpromise.findMany({
         where: { editedById: parent.id }, // Fetch promises edited by this user
       });
     },

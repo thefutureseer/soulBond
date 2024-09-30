@@ -14,12 +14,26 @@ console.log("Heres the data: ", data);
     <div>
       <h2 className="text-2xl font-bold mb-4">Promises List</h2>
       {data?.getPromises?.length > 0 ? (
-        data.getPromises.map((promise: PromiseType) => (
-          <div key={promise.id} className="mb-4 p-4 border rounded">
-            <h3 className="text-xl font-semibold">{promise.title}</h3>
-            <p>{promise.description}</p>
-            <p>Status: {promise.status}</p>
-            {/* <p className="text-sm text-gray-600">Created at: {new Date(promise.createdAt).toLocaleString()}</p> */}
+        data.getPromises.map((soulpromise: PromiseType) => (
+          <div key={soulpromise.id} className="mb-4 p-4 border rounded">
+            <h3 className="text-xl font-semibold">{soulpromise.title}</h3>
+            <p>{soulpromise.description}</p>
+            <p>Status: {soulpromise.status}</p>
+            <p className="text-sm text-gray-600">Created at: { // Format the date correctly
+                (() => {
+                  const createdAtDate = new Date(soulpromise.createdAt);
+                  const formatter = new Intl.DateTimeFormat('en-US', { 
+                    year: 'numeric', 
+                    month: 'long', 
+                    day: 'numeric', 
+                    hour: 'numeric', 
+                    minute: 'numeric', 
+                    second: 'numeric' 
+                  });
+                  return formatter.format(createdAtDate);
+                })()
+              }
+            </p>
           </div>
         ))
       ) : (

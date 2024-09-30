@@ -7,8 +7,8 @@ import { PromiseType, CreatePromiseResponse, CreatePromiseInput } from '../types
 import styles from '../../styles/styles.module.css';
 
 // Type guard for PromiseType
-const isPromiseType = (promise: any): promise is PromiseType => {
-  return promise && typeof promise.id === 'string' && typeof promise.title === 'string';
+const isPromiseType = (soulpromise: any): soulpromise is PromiseType => {
+  return soulpromise && typeof soulpromise.id === 'string' && typeof soulpromise.title === 'string';
 };
 
 const PromiseForm = () => {
@@ -80,7 +80,7 @@ const PromiseForm = () => {
         className="p-2 border rounded"
       />
       <textarea 
-        placeholder="Promise description" 
+        placeholder="Promise description of souls" 
         value={description} 
         onChange={(e) => setDescription(e.target.value)} 
         className={`${styles['responsive-textarea']} p-2 border rounded`}       

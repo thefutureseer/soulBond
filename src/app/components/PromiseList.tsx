@@ -3,6 +3,7 @@
 import { useQuery } from '@apollo/client';
 import { GET_PROMISES } from '../../graphql/promises';
 import { PromiseType } from '../types/graphql';
+import { format, parseISO, isValid } from 'date-fns';
 
 const PromiseList = () => {
   const { loading, error, data } = useQuery(GET_PROMISES);
@@ -20,18 +21,22 @@ console.log("Heres the data: ", data);
             <p>{soulpromise.description}</p>
             <p>Status: {soulpromise.status}</p>
             <p className="text-sm text-gray-600">Created at: { // Format the date correctly
-                (() => {
-                  const createdAtDate = new Date(soulpromise.createdAt);
-                  const formatter = new Intl.DateTimeFormat('en-US', { 
-                    year: 'numeric', 
-                    month: 'long', 
-                    day: 'numeric', 
-                    hour: 'numeric', 
-                    minute: 'numeric', 
-                    second: 'numeric' 
-                  });
-                  return formatter.format(createdAtDate);
-                })()
+              (() => {
+                // Log the raw date value for debugging
+                console.log("Raw createdAt value:", soulpromise.createdAt);
+
+                // Convert the timestamp to a Date object
+                const createdAtDate = new Date(Number(soulpromise.createdAt)); // Ensure it's a number
+
+                // Check if the date is valid
+                if (!isValid(createdAtDate)) {
+                  console.error("Invalid date value for createdAt:", soulpromise.createdAt);
+                  return "Invalid date"; // Fallback value if date is invalid
+                }
+
+                // Format the date if valid
+                return format(createdAtDate, 'MMMM dd, yyyy HH:mm:ss');
+              })()
               }
             </p>
           </div>

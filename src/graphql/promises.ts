@@ -1,6 +1,6 @@
 // src/graphql/promises.ts
 import { gql } from '@apollo/client';
-import { CreatePromiseInput } from '../app/types/graphql';
+import { CreatePromiseInput } from 'app/types/graphql';
 
 // Define the CREATE_PROMISE mutation
 export const CREATE_PROMISE = gql`

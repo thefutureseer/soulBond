@@ -4,7 +4,7 @@ import React, { useState, useCallback } from 'react';
 import { useMutation, ApolloCache } from '@apollo/client';
 import { GET_PROMISES, CREATE_PROMISE } from '../../graphql/promises';
 import { PromiseType, CreatePromiseResponse, CreatePromiseInput } from '../types/graphql';
-import styles from '../../styles/styles.module.css';
+import styles from 'styles/styles.module.css';
 
 // Type guard for PromiseType
 const isPromiseType = (soulpromise: any): soulpromise is PromiseType => {

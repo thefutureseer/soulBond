@@ -1,15 +1,19 @@
 "use client";
-import React from 'react';
-import { ApolloProvider, ApolloClient, InMemoryCache } from '@apollo/client';
+import React, { ReactNode } from 'react';
+import { ApolloProvider, ApolloClient, InMemoryCache, from } from '@apollo/client';
+//bring in type for children 
+import { ClientApolloProviderProps } from 'app/types/context';
 
-const GRAPHQL_ENDPOINT = process.env.NEXT_PUBLIC_GRAPHQL_URL || 'http://localhost:3000/api/graphql';
+const GRAPHQL_ENDPOINT = process.env.NEXT_PUBLIC_GRAPHQL_URL || 'https://soulbond.onrender.com/api/graphql';;
 
 const client = new ApolloClient({
   uri: GRAPHQL_ENDPOINT,
   cache: new InMemoryCache(),
 });
 
-const ClientApolloProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+
+
+const ClientApolloProvider: React.FC<ClientApolloProviderProps> = ({ children }) => {
   return <ApolloProvider client={client}>{children}</ApolloProvider>;
 };
 

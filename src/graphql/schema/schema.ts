@@ -38,6 +38,8 @@ const typeDefs = gql`
     title: String!
     description: String!
     editedById: String! # ID of the user creating the promise
+    version: Int!       # Version of the promise
+    status: StatusUs!   # Status of the promise
   }
 
   input UpdatePromiseInput {

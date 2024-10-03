@@ -23,6 +23,20 @@ export const CREATE_PROMISE = gql`
   }
 `;
 
+export const UPDATE_PROMISE = gql`
+  mutation UpdatePromise($input: UpdatePromiseInput!) {
+    updatePromise(input: $input) {
+      id
+      title
+      description
+      editedById
+      status
+      createdAt
+      updatedAt
+    }
+  }
+`;
+
 // Define the GET_PROMISES query
 export const GET_PROMISES = gql`
   query GetPromises {

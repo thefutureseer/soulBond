@@ -50,15 +50,23 @@ const resolvers = {
     },
     
     // Create a new promise
-    createPromise: async (_: unknown, { input }: { input: { title: string; description: string; editedById: string } }, context: Context) => {
+    createPromise: async (_: unknown, { input }: { input: { title: string; description: string; editedById: string, version: number, status: string } }, context: Context) => {
       const { prisma } = context;
+
+      try {
+      const status = input.status as StatusUs;
       return await prisma.soulpromise.create({
         data: {
           title: input.title,
           description: input.description,
-          editedBy: { connect: { id: input.editedById } }
+          version: input.version,
+          status: status,
+          editedBy: { connect: { id: input.editedById } },
               },
       });
+    } catch (error) {
+      throw new Error(`Failed to create promise: ${error}`);
+    }
     },
     
     // Update an existing promise
@@ -73,7 +81,8 @@ const resolvers = {
           title: input.title || undefined,
           description: input.description || undefined,
           status: status,
-          editedById: input.editedById, // Set the ID of the user making the edit
+          editedById: input.editedById, // Set the ID of the user making the edit/default for now
+          version: {increment:1}
         },
       });
     },

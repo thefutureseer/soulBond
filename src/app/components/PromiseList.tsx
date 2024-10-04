@@ -1,18 +1,40 @@
 'use client';
 
+import React, {useState} from 'react';
 import { useQuery } from '@apollo/client';
 import { GET_PROMISES } from '../../graphql/promises';
 import { PromiseType } from '../types/graphql';
-import { format, parseISO, isValid } from 'date-fns';
+import { format, isValid } from 'date-fns';
+import EditButtonForm from './EditButtonForm';
 
-const PromiseList = () => {
+const PromiseList: React.FC = () => {
   const { loading, error, data } = useQuery(GET_PROMISES);
+  const [editingPromise, setEdit] = useState(false);
+  const [selectedPromise, setSelectedPromise] = useState<PromiseType | undefined>(undefined);
+  
+  const handleEdit = (soulpromise: PromiseType) => {
+    setSelectedPromise(soulpromise);
+    setEdit(true);
+  };
+  
+    if (loading) return <p>Loading promises...</p>;
+    if (error) return <p>Error fetching promises: {error.message}</p>;
 
-  if (loading) return <p>Loading promises...</p>;
-  if (error) return <p>Error: {error.message}</p>;
-console.log("Heres the data: ", data);
   return (
     <div>
+      {
+        editingPromise && selectedPromise && (
+          <EditButtonForm
+            soulpromise={selectedPromise}
+            onClose={
+              ()=>{
+                setEdit(false);
+                setSelectedPromise(undefined);
+              }
+            }
+          />
+        )
+      }
       <h2 className="text-2xl font-bold mb-4">Promises List</h2>
       {data?.getPromises?.length > 0 ? (
         data.getPromises.map((soulpromise: PromiseType) => (
@@ -20,7 +42,7 @@ console.log("Heres the data: ", data);
             <h3 className="text-xl font-semibold">{soulpromise.title}</h3>
             <p>{soulpromise.description}</p>
             <p>Status: {soulpromise.status}</p>
-            <p className="text-sm text-gray-600">Created at: { // Format the date correctly
+            <p className="text-sm text-gray-600">last update was: { // Format the date correctly
               (() => {
                 // Log the raw date value for debugging
                 console.log("Raw createdAt value:", soulpromise.createdAt);
@@ -39,6 +61,7 @@ console.log("Heres the data: ", data);
               })()
               }
             </p>
+            <button onClick={() => handleEdit(soulpromise)} className="p-2 bg-gradient-to-b from-indigo-300 to-white-100 text-white">Edit</button>
           </div>
         ))
       ) : (

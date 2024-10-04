@@ -6,6 +6,21 @@
   resize: none; /* Prevent resizing if needed */
 }
 
+.spinner {
+  border: 4px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top-color: #ffffff;
+  width: 20px;
+  height: 20px;
+  animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 @media (min-width: 640px) {
   .responsive-textarea {
     height: 3rem;

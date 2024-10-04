@@ -40,6 +40,8 @@ export type CreatePromiseInput = {
     title: string;        // Title of the promise
     description: string;  // Description of the promise
     editedById: string;   // ID of the user who edited the promise
+    version: number;
+    status: string;
   };
 };
 

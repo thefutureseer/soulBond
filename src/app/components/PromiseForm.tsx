@@ -3,7 +3,7 @@
 import React, { useState, useCallback } from 'react';
 import { useMutation, ApolloCache } from '@apollo/client';
 import { GET_PROMISES, CREATE_PROMISE } from '../../graphql/promises';
-import { PromiseType, CreatePromiseResponse, CreatePromiseInput } from '../types/graphql';
+import { PromiseType, CreatePromiseResponse, CreatePromiseInput, StatusUs } from '../types/graphql';
 import styles from 'styles/styles.module.css';
 
 // Type guard for PromiseType
@@ -14,7 +14,9 @@ const isPromiseType = (soulpromise: any): soulpromise is PromiseType => {
 const PromiseForm = () => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
-  const [editedById, setEditedById] = useState(''); // Renamed to match your CreatePromiseInput
+  const [editedById, setEditedById] = useState('');
+  const [version, setVersion] = useState(1); //default first version
+  const [status, setStatus] = useState("PENDING"); //default first status
   const [errorMessage, setErrorMessage] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
 
@@ -40,7 +42,9 @@ const PromiseForm = () => {
       setSuccessMessage('Promise created successfully!');
       setTitle('');
       setDescription('');
-      setEditedById(''); // Reset input
+      setEditedById('');
+      setVersion(1);
+      setStatus('PENDING');
       setErrorMessage('');
     },
     onError: (err) => {
@@ -60,15 +64,15 @@ const PromiseForm = () => {
     setSuccessMessage(''); // Clear previous success messages
 
     // Call createPromise with the correct structure
-    createPromise({ variables: { input: { title, description, editedById } } });
-  }, [title, description, editedById, createPromise]);
+    createPromise({ variables: { input: { title, description, editedById, version, status } } });
+  }, [title, description, editedById, version, status, createPromise]);
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-4">
       <input 
         type="text" 
-        placeholder='Name'
-        value={editedById} 
+        placeholder='Your soul bond user id'
+        value={editedById || "123e4567-e89b-12d3-a456-426614174000"} 
         onChange={(e) => setEditedById(e.target.value)} 
         className="p-2 border rounded"
       />

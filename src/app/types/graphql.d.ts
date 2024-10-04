@@ -26,8 +26,17 @@ export type PromiseType = {
   status: StatusUs; // Enum value for status
 };
 
+// Define the structure of the response for GET_PROMISES
+export interface GetPromisesQueryResult {
+  getPromises: PromiseType[]; // An array of PromiseType
+}
+
 export type CreatePromiseResponse = {
   createPromise: PromiseType; // The promise that was created
+};
+
+export type UpdatePromiseResponse = {
+  updatePromise: PromiseType; // The promise that was updated
 };
 
 export type CreateUserInput = {
@@ -50,6 +59,7 @@ export type UpdatePromiseInput = {
   title?: string;
   description?: string;
   status?: StatusUs;
+  editedById: string
 };
 
 export type Query = {

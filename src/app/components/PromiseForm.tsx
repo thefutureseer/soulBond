@@ -89,7 +89,7 @@ const PromiseForm = () => {
         onChange={(e) => setDescription(e.target.value)} 
         className={`${styles['responsive-textarea']} p-2 border rounded`}       
       />
-      <button type="submit" disabled={loading} className="p-2 bg-blue-500 text-white rounded">
+      <button type="submit" disabled={loading} className="p-2 bg-blue-400 text-white rounded">
         {loading ? 'Creating...' : 'Make a Promise'}
       </button>
       {errorMessage && <p className="text-red-500">{errorMessage}</p>}

@@ -18,13 +18,16 @@ const PromiseList: React.FC = () => {
   const handleEdit = (soulpromise: PromiseType) => {
     setSelectedPromise(soulpromise);
     setEdit(true);
-  };
+  }
 
   if (loading) return <p>Loading promises...</p>;
   if (error) return <p>Error fetching promises: {error.message}</p>;
 
   return (
     <div>
+     <div>
+      
+     </div>
       {editingPromise && selectedPromise && (
         <EditButtonForm
           soulpromise={selectedPromise}
@@ -34,7 +37,6 @@ const PromiseList: React.FC = () => {
           }}
         />
       )}
-      <h2 className="text-2xl font-bold mb-4">Promises List</h2>
       {data?.getPromises?.length > 0 ? (
         data.getPromises.map((soulpromise: PromiseType) => (
           <div key={soulpromise.id} className="mb-4 p-4 border rounded">

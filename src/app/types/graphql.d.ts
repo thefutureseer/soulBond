@@ -31,6 +31,11 @@ export interface GetPromisesQueryResult {
   getPromises: PromiseType[]; // An array of PromiseType
 }
 
+// Type for fetching a single promise
+export type GetPromiseQueryResult = {
+  getPromise: PromiseType | null; // A single PromiseType or null if not found
+};
+
 export type CreatePromiseResponse = {
   createPromise: PromiseType; // The promise that was created
 };

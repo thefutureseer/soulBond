@@ -1,4 +1,5 @@
 "use client";
+
 import React from 'react';
 import { ApolloProvider, ApolloClient, InMemoryCache } from '@apollo/client';
 //bring in type for children 

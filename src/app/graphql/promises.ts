@@ -1,4 +1,3 @@
-// src/graphql/promises.ts
 import { gql } from '@apollo/client';
 import { CreatePromiseInput } from 'app/types/graphql';
 
@@ -47,6 +46,27 @@ export const GET_PROMISES = gql`
       editedBy {
         id
         name
+      }
+      editedById
+      version
+      createdAt
+      updatedAt
+      status
+    }
+  }
+`;
+
+// Define the GET_PROMISE query to fetch a specific promise by ID
+export const GET_PROMISE = gql`
+  query GetPromise($id: String!) {
+    getPromise(id: $id) {
+      id
+      title
+      description
+      editedBy {
+        id
+        name
+        email
       }
       editedById
       version

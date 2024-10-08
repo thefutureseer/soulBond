@@ -20,8 +20,8 @@
       }
     ],
     "paths": {
-      "components/*":  ["src/app/components/*"],
-      "graphql/*":["src/app/api/graphql/*"],
+      "components/*":  ["./src/app/components/*"],
+      "api/*":["src/graphql/*"],
       "app/*": ["./src/app/*"], 
       "styles/*": ["./src/styles/*"],
       "types/*": ["./src/app/types/*"]

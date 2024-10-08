@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { useQuery, useApolloClient } from '@apollo/client';
-import { GET_PROMISES } from 'graphql/promises';
+import { GET_PROMISES } from '../graphql/promises';
 import { PromiseType, GetPromisesQueryResult } from 'types/graphql';
 import { format, isValid } from 'date-fns';
 import { statusColors } from '../ui/statusColors';

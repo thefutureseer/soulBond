@@ -1,5 +1,5 @@
-import { Context } from '../../app/types/context';
-import { StatusUs } from '../../app/types/graphql'
+import { Context } from 'types/context';
+import { StatusUs } from 'types/graphql'
 
 const resolvers = {
   Query: {
@@ -17,6 +17,7 @@ const resolvers = {
     
     // Fetch all promises
     getPromises: async (_: unknown, __: unknown, context: Context) => {
+      console.log("getting promises: " );
       const { prisma } = context;
       return await prisma.soulpromise.findMany({
         include: {

@@ -2,6 +2,11 @@ import { gql } from 'apollo-server-micro';
 
 // Define type definitions using GraphQL SDL
 const typeDefs = gql`
+
+  type Subscription {
+    promiseUpdated: PromiseType
+  }
+
   enum StatusUs {
     PENDING
     COMPLETED

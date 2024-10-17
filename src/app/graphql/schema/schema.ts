@@ -58,14 +58,14 @@ const typeDefs = gql`
   type Query {
     getUsers: [User!]!
     getUser(id: ID!): User
-    getPromises: [PromiseType!]!
+    getPromises: [PromiseType]
     getPromise(id: ID!): PromiseType
   }
 
   type Mutation {
     createUser(input: CreateUserInput!): User!
     createPromise(input: CreatePromiseInput!): PromiseType!
-    updatePromise(input: UpdatePromiseInput!): PromiseType!
+    updatePromise(input: UpdatePromiseInput!): PromiseType
   }
 `;
 

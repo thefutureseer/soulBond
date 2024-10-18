@@ -19,7 +19,7 @@ const httpLink = createHttpLink({
 
 // Define the WebSocket link for handling subscriptions
 const wsLink = new WebSocketLink({
-  uri: process.env.NEXT_PUBLIC_WS_URL || 'ws://localhost:4000/api/graphql', // Use env variable for WebSocket URL
+  uri: process.env.NEXT_PUBLIC_WS_URL || 'ws://localhost:3000/api/graphql', // Use env variable for WebSocket URL
   options: {
     reconnect: true, // Automatically reconnect if the connection drops
   },

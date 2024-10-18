@@ -3,52 +3,75 @@ import { ApolloServerPluginLandingPageGraphQLPlayground } from 'apollo-server-co
 import { makeExecutableSchema } from '@graphql-tools/schema';
 const { WebSocketServer } = require('ws');
 import { useServer } from 'graphql-ws/lib/use/ws';
+import { createServer } from 'http';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import resolvers from 'graphql/resolvers';
 import typeDefs from 'graphql/schema';
 import prisma from '../../../app/utils/prisma';
-import { createServer } from 'http';
 import { Context } from 'types/context';
 
-// Use the environment variable for the port (Render provides PORT automatically)
-const wsPort = process.env.PORT || 4000; // Default to 4000 in development
+// Define the GraphQL schema
+const schema = makeExecutableSchema({ typeDefs, resolvers });
 
-const httpServer = createServer();
-
-// Initialize the WebSocket server
-const wsServer = new WebSocketServer({
-  server: httpServer,
-  path: '/api/graphql', // WebSocket endpoint path
-});
-
-useServer({ schema: makeExecutableSchema({ typeDefs, resolvers }) }, wsServer);
-
-// Create Apollo Server
+// Create the Apollo Server
 const apolloServer = new ApolloServer({
-  typeDefs,
-  resolvers,
+  schema,
   context: (): Context => ({ prisma }),
-  plugins: [ApolloServerPluginLandingPageGraphQLPlayground()], // Playground for dev
+  plugins: [ApolloServerPluginLandingPageGraphQLPlayground()],
 });
 
-export const config = {
-  api: {
-    bodyParser: false, // GraphQL doesn't use body parsing
-  },
-};
-
+// Start the Apollo Server
 const startServer = apolloServer.start();
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  await startServer;
-  const apolloHandler = apolloServer.createHandler({ path: '/api/graphql' });
-  await apolloHandler(req, res);
+// Create the HTTP handler
+const handler = async (req: NextApiRequest, res: NextApiResponse) => {
+  // If it's an HTTP request, handle with Apollo
+  if (req.url === '/api/graphql') {
+    await startServer;
+    const apolloHandler = apolloServer.createHandler({ path: '/api/graphql' });
+    return apolloHandler(req, res);
+  } else {
+    res.setHeader('Allow', ['POST', 'OPTIONS']);
+    res.status(405).end(`Method ${req.method} Not Allowed`);
+  }
 };
 
-// Ensure the HTTP server starts listening on Render's dynamic port
-if (!httpServer.listening) {
-  httpServer.listen(wsPort, () => {
-    console.log(`Server ready at http://localhost:${wsPort}/api/graphql`);
-    console.log(`WebSocket ready at ws://localhost:${wsPort}/api/graphql`);
-  });
+// Create the HTTP server
+const httpServer = createServer(async (req, res) => {
+  // Handle HTTP requests
+  await handler(req as NextApiRequest, res as NextApiResponse);
+});
+
+// Initialize the WebSocket server on the same HTTP server
+const wsServer = new WebSocketServer({
+  noServer: true, // We don't want WebSocketServer to listen on a port, we want to integrate it with httpServer
+});
+
+// Handle WebSocket connections for subscriptions
+useServer({ schema }, wsServer);
+
+// Upgrade HTTP to WebSocket if needed
+httpServer.on('upgrade', (request, socket, head) => {
+  if (request.url === '/api/graphql') {
+    wsServer.handleUpgrade(request, socket, head, (websocket: any) => {
+      wsServer.emit('connection', websocket, request);
+    });
+  }
+});
+
+// Listen on port 3000 for both HTTP and WebSocket connections
+const PORT = process.env.PORT || 3000;
+httpServer.listen(PORT, () => {
+  console.log(`HTTP server running on  http://localhost:${PORT}/api/graphql`);
+  console.log(`WebSocket server ready for subscriptions at ws://localhost:${PORT}/api/graphql`);
+});
+
+// Export the handler for Next.js
+export default handler;
+
+// Optional: Configuration to disable bodyParser for Apollo
+export const config = {
+  api: {
+    bodyParser: false, // Disable body parsing so Apollo can handle the request
+  },
 };

@@ -42,6 +42,7 @@ const resolvers = {
           editedBy: true, // Include the user who edited the promise
         },
       });
+
     },
   },
 
@@ -79,16 +80,16 @@ const resolvers = {
     },
     
     // Update an existing promise
-    updatePromise: async (_: unknown, { input }: { input: UpdatePromiseInput }, context: Context) => {
+    updatePromise: async (_: unknown, {id, input }: {id:string, input: UpdatePromiseInput }, context: Context) => {
       const { prisma } = context;
       const status = input.status as StatusUs | undefined; // Optional status update
 
       const updatedPromise = await prisma.soulpromise.update({
-        where: { id: input.id }, // Find promise by ID
+        where: { id }, // Find promise by ID
         data: {
           title: input.title || undefined, // Update title if provided
           description: input.description || undefined, // Update description if provided
-          status: status, // Update status if provided
+          status: input.status, // Update status if provided
           editedById: input.editedById, // Set the editor's ID (for now, defaults to John)
           version: { increment: 1 }, // Increment the version
         },
@@ -96,7 +97,7 @@ const resolvers = {
 
       // Publish the updated promise to subscribers of the "PROMISE_UPDATED" event
       pubSub.publish(PROMISE_UPDATED, { promiseUpdate: updatedPromise });
-      return;
+      return updatedPromise;
     },
   },
 

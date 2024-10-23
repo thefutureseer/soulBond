@@ -23,20 +23,22 @@ export const CREATE_PROMISE = gql`
 `;
 
 export const UPDATE_PROMISE = gql`
-  mutation UpdatePromise($input: UpdatePromiseInput!) {
-    updatePromise(input: $input) {
+  mutation UpdatePromise($id: string,$input: UpdatePromiseInput!) {
+    updatePromise(id:$id, input: $input) {
       id
       title
       description
-      editedById
       status
       createdAt
       updatedAt
+      editedById {
+        id
+        name
+      }
     }
   }
 `;
 
-// Define the GET_PROMISES query
 const PROMISE_UPDATED_SUBSCRIPTION = gql`
   subscription OnPromiseUpdated {
     promiseUpdated {
@@ -51,6 +53,7 @@ const PROMISE_UPDATED_SUBSCRIPTION = gql`
 `;
 
 
+// Define the GET_PROMISES query
 export const GET_PROMISES = gql`
   query GetPromises {
     getPromises {
@@ -72,7 +75,7 @@ export const GET_PROMISES = gql`
 
 // Define the GET_PROMISE query to fetch a specific promise by ID
 export const GET_PROMISE = gql`
-  query GetPromise($id: String!) {
+  query GetPromise($id: ID!) {
     getPromise(id: $id) {
       id
       title

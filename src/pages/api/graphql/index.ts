@@ -16,7 +16,7 @@ const schema = makeExecutableSchema({ typeDefs, resolvers });
 // Create the Apollo Server
 const apolloServer = new ApolloServer({
   schema,
-  context: (): Context => ({ prisma }),
+  context: (): Context => {return ({ prisma })},
   plugins: [ApolloServerPluginLandingPageGraphQLPlayground()],
 });
 

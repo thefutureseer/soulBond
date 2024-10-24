@@ -3,7 +3,7 @@
 import React, { useState, useCallback } from 'react';
 import { useMutation, ApolloCache } from '@apollo/client';
 import { GET_PROMISES, CREATE_PROMISE } from '../graphql/promises';
-import { PromiseType, CreatePromiseResponse, CreatePromiseInput, StatusUs } from '../types/graphql';
+import { PromiseType, CreatePromiseResponse, CreatePromiseInput, StatusUs } from 'types/graphql.d';
 import styles from 'styles/styles.module.css';
 
 // Type guard for PromiseType
@@ -63,8 +63,17 @@ const PromiseForm = () => {
     setErrorMessage(''); // Clear previous errors
     setSuccessMessage(''); // Clear previous success messages
 
+  // Validate or map the string status to the StatusUs enum.
+  const mappedStatus = StatusUs[status as keyof typeof StatusUs]; 
+
+  //if `mappedStatus` is not a valid enum value.
+  if (!mappedStatus) {
+    console.error(`Invalid status value: ${status}`);
+    return;
+  }
+
     // Call createPromise with the correct structure
-    createPromise({ variables: { input: { title, description, editedById, version, status } } });
+    createPromise({ variables: { input: { title, description, editedById, version, status:mappedStatus } } });
   }, [title, description, editedById, version, status, createPromise]);
 
   return (

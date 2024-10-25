@@ -18,15 +18,15 @@ const httpLink = createHttpLink({
 });
 
 // Define the WebSocket link for handling subscriptions
-const wsLink = new WebSocketLink({
+const wsLink = typeof window !== 'undefined' ? new WebSocketLink({
   uri: process.env.NEXT_PUBLIC_WS_URL || 'ws://soulbond.onrender.com/api/graphql', // Use env variable for WebSocket URL
   options: {
     reconnect: true, // Automatically reconnect if the connection drops
   },
-});
+}) : null;
 
-// Split the connection based on the operation type (queries vs. subscriptions)
-const splitLink = split(
+// Conditionally split based on operation type, defaulting to httpLink if wsLink is not available
+const splitLink = wsLink ? split(
   ({ query }) => {
     const definition = getMainDefinition(query);
     return (
@@ -36,7 +36,7 @@ const splitLink = split(
   },
   wsLink, // Use WebSocket for subscriptions
   httpLink // Use HTTP for queries and mutations
-);
+) : httpLink;
 
 // Create the Apollo Client instance with the split link and an in-memory cache
 const client = new ApolloClient({

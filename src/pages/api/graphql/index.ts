@@ -23,13 +23,19 @@ const apolloServer = new ApolloServer({
 // Start the Apollo Server
 const startServer = apolloServer.start();
 
+let apolloHandler: any;
+
+
 // Create the HTTP handler
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   // If it's an HTTP request, handle with Apollo
   if (req.url === '/api/graphql') {
-    await startServer;
-    const apolloHandler = apolloServer.createHandler({ path: '/api/graphql' });
-    return apolloHandler(req, res);
+    if(!apolloHandler) {
+
+      await startServer;
+      apolloHandler = apolloServer.createHandler({ path: '/api/graphql' });
+    };
+      return apolloHandler(req, res);
   } else {
     res.setHeader('Allow', ['POST', 'OPTIONS']);
     res.status(405).end(`Method ${req.method} Not Allowed`);

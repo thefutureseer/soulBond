@@ -66,7 +66,7 @@ httpServer.on('upgrade', (request, socket, head) => {
 });
 
 // Listen on port 3000 for both HTTP and WebSocket connections
-const PORT = process.env.NEXT_PUBLIC_GRAPHQL_URL || 3000;
+const PORT = process.env.PORT || 3000;
 httpServer.listen(PORT, () => {
   console.log(`HTTP server running on http: port# ${PORT}/api/graphql`);
   console.log(`WebSocket server ready for subscriptions at ws:port# ${PORT}/api/graphql`);

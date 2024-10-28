@@ -14,12 +14,12 @@ import { ClientApolloProviderProps } from 'types/context';
 
 // Define the HTTP link for queries and mutations
 const httpLink = createHttpLink({
-  uri: process.env.NEXT_PUBLIC_GRAPHQL_URL, // Use env variable for HTTP URL
+  uri: process.env.PORT, // Use env variable for HTTP URL
 });
 
 // Define the WebSocket link for handling subscriptions
 const wsLink = typeof window !== 'undefined' ? new WebSocketLink({
-  uri: process.env.NEXT_PUBLIC_WS_URL || 'ws://soulbond.onrender.com/api/graphql', // Use env variable for WebSocket URL
+  uri: process.env.PORT || 'ws://soulbond.onrender.com/api/graphql', // Use env variable for WebSocket URL
   options: {
     reconnect: true, // Automatically reconnect if the connection drops
   },

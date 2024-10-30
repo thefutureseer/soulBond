@@ -1,8 +1,6 @@
 import { ApolloServer } from 'apollo-server-micro';
 import { ApolloServerPluginLandingPageGraphQLPlayground } from 'apollo-server-core';
 import { makeExecutableSchema } from '@graphql-tools/schema';
-const { WebSocketServer } = require('ws');
-import { useServer } from 'graphql-ws/lib/use/ws';
 import { createServer } from 'http';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import resolvers from 'graphql/resolvers';
@@ -46,23 +44,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 const httpServer = createServer(async (req, res) => {
   // Handle HTTP requests
   await handler(req as NextApiRequest, res as NextApiResponse);
-});
-
-// Initialize the WebSocket server on the same HTTP server
-const wsServer = new WebSocketServer({
-  noServer: true, // We don't want WebSocketServer to listen on a port, we want to integrate it with httpServer
-});
-
-// Handle WebSocket connections for subscriptions
-useServer({ schema }, wsServer);
-
-// Upgrade HTTP to WebSocket if needed
-httpServer.on('upgrade', (request, socket, head) => {
-  if (request.url === '/api/graphql') {
-    wsServer.handleUpgrade(request, socket, head, (websocket: any) => {
-      wsServer.emit('connection', websocket, request);
-    });
-  }
 });
 
 // Listen on port 3000 for both HTTP and WebSocket connections

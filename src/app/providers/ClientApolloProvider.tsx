@@ -5,14 +5,14 @@ import {
   ApolloProvider, 
   ApolloClient, 
   InMemoryCache, 
-  // split 
+  HttpLink
 } from '@apollo/client';
-import { createHttpLink } from '@apollo/client/link/http';
+// import { createHttpLink } from '@apollo/client/link/http';
 import { ClientApolloProviderProps } from 'types/context';
 
 // Define the HTTP link for queries and mutations
-const httpLink = createHttpLink({
-  uri: process.env.PORT, // Use env variable for HTTP URL
+const httpLink = new HttpLink({
+  uri: process.env.PORT || 'http://localhost:3000/api/graphql', // Use env variable for HTTP URL
 });
 
 // Create the Apollo Client instance with the split link and an in-memory cache

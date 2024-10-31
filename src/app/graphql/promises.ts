@@ -1,4 +1,4 @@
-import { gql, useSubscription } from '@apollo/client';
+import { gql } from '@apollo/client';
 import { CreatePromiseInput } from 'app/types/graphql';
 
 // Define the mutations
@@ -39,18 +39,18 @@ export const UPDATE_PROMISE = gql`
   }
 `;
 
-const PROMISE_UPDATED_SUBSCRIPTION = gql`
-  subscription OnPromiseUpdated {
-    promiseUpdated {
-      id
-      title
-      description
-      editedById
-      status
-      createdAt
-      updatedAt    }
-  }
-`;
+// const PROMISE_UPDATED_SUBSCRIPTION = gql`
+//   subscription OnPromiseUpdated {
+//     promiseUpdated {
+//       id
+//       title
+//       description
+//       editedById
+//       status
+//       createdAt
+//       updatedAt    }
+//   }
+// `;
 
 
 // Define the GET_PROMISES query

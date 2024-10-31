@@ -1,9 +1,5 @@
-import { PubSub } from 'graphql-subscriptions'; // Import PubSub for managing subscriptions
 import { Context } from 'types/context'; // Import types for context (includes Prisma and more)
 import { StatusUs, UpdatePromiseInput } from 'types/graphql'; // Import custom types for GraphQL
-
-// Create a new PubSub instance for managing events
-const pubSub = new PubSub();
 
 // Define the event name for when a promise is updated
 const PROMISE_UPDATED = "PROMISE_UPDATED";
@@ -95,17 +91,8 @@ const resolvers = {
         },
       });
 
-      // Publish the updated promise to subscribers of the "PROMISE_UPDATED" event
-      pubSub.publish(PROMISE_UPDATED, { promiseUpdate: updatedPromise });
       return updatedPromise;
     },
-  },
-
-  // Subscription resolver (for real-time updates)
-  Subscription: {
-    promiseUpdated: {
-      subscribe: () => pubSub.asyncIterator([PROMISE_UPDATED]), // Listen for "PROMISE_UPDATED" events
-    }
   },
 
   // Custom resolvers for fields in the User type

@@ -1,3 +1,4 @@
+import { PassThrough } from 'stream';
 import { Context } from 'types/context'; // Import types for context (includes Prisma and more)
 import { StatusUs, UpdatePromiseInput } from 'types/graphql'; // Import custom types for GraphQL
 
@@ -22,11 +23,16 @@ const resolvers = {
     // Fetch all promises (SoulPromise) with associated user data
     getPromises: async (_: unknown, __: unknown, context: Context) => {
       const { prisma } = context;
-      return await prisma.soulpromise.findMany({
-        include: {
-          editedBy: true, // Include user info for each promise
-        },
-      });   
+      try{
+        return await prisma.soulpromise.findMany({
+          include: {
+            editedBy: true, // Include user info for each promise
+          },
+        });   
+      }catch(error){
+        console.error("Error resolver fetch soulpromises ", error);
+        throw new Error("fail to fetch soul promises")
+      }
     },
 
     

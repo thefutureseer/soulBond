@@ -39,20 +39,6 @@ export const UPDATE_PROMISE = gql`
   }
 `;
 
-// const PROMISE_UPDATED_SUBSCRIPTION = gql`
-//   subscription OnPromiseUpdated {
-//     promiseUpdated {
-//       id
-//       title
-//       description
-//       editedById
-//       status
-//       createdAt
-//       updatedAt    }
-//   }
-// `;
-
-
 // Define the GET_PROMISES query
 export const GET_PROMISES = gql`
   query GetPromises {

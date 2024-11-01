@@ -26,8 +26,9 @@ const resolvers = {
         include: {
           editedBy: true, // Include user info for each promise
         },
-      });
+      });   
     },
+
     
     // Fetch a specific promise by ID
     getPromise: async (_: unknown, { id }: { id: string }, context: Context) => {
@@ -38,10 +39,12 @@ const resolvers = {
           editedBy: true, // Include the user who edited the promise
         },
       });
-
+      
     },
-  },
 
+    testQuery: async () => "This is a test response",
+  },
+  
   // Mutation resolvers (for modifying data)
   Mutation: {
     // Create a new user in the database

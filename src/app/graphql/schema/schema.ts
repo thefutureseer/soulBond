@@ -63,6 +63,10 @@ const typeDefs = gql`
     createPromise(input: CreatePromiseInput!): PromiseType!
     updatePromise(input: UpdatePromiseInput!): PromiseType
   }
+
+  type Query {
+  testQuery: String
+}
 `;
 
 export default typeDefs;

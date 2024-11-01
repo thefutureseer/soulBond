@@ -12,7 +12,7 @@ import { ClientApolloProviderProps } from 'types/context';
 
 // Define the HTTP link for queries and mutations
 const httpLink = new HttpLink({
-  uri: process.env.PORT || 'http://localhost:3000/api/graphql', // Use env variable for HTTP URL
+  uri: process.env.NEXT_PUBLIC_GRAPHQL_URI || 'http://localhost:3000/api/graphql', // Use env variable for HTTP URL
 });
 
 // Create the Apollo Client instance with the split link and an in-memory cache

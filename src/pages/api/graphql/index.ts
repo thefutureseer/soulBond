@@ -1,5 +1,6 @@
 import { ApolloServer } from 'apollo-server-micro';
 import { ApolloServerPluginLandingPageGraphQLPlayground } from 'apollo-server-core';
+import { InMemoryLRUCache } from '@apollo/utils.keyvaluecache';
 import { makeExecutableSchema } from '@graphql-tools/schema';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import resolvers from 'graphql/resolvers';
@@ -14,6 +15,9 @@ const schema = makeExecutableSchema({ typeDefs, resolvers });
 const apolloServer = new ApolloServer({
   schema,
   context: (): Context => {return ({ prisma })},
+  persistedQueries: {
+    cache: new InMemoryLRUCache({ maxSize: 100 }), // Bounded cache with a max of 100 items
+  },
   plugins: [ApolloServerPluginLandingPageGraphQLPlayground()],
 });
 

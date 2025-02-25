@@ -1,9 +1,5 @@
-import { PassThrough } from 'stream';
 import { Context } from 'types/context'; // Import types for context (includes Prisma and more)
 import { StatusUs, UpdatePromiseInput } from 'types/graphql'; // Import custom types for GraphQL
-
-// Define the event name for when a promise is updated
-const PROMISE_UPDATED = "PROMISE_UPDATED";
 
 const resolvers = {
   // Query resolvers (for fetching data)

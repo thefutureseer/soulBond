@@ -23,7 +23,7 @@ const typeDefs = gql`
     title: String!
     description: String!
     editedBy: User!          # User who last edited this promise
-    editedById: String!      # ID of the user who last edited
+    editedById: ID!      # ID  IDuser who last edited
     version: Int!
     createdAt: String!
     updatedAt: String!
@@ -38,7 +38,7 @@ const typeDefs = gql`
   input CreatePromiseInput {
     title: String!
     description: String!
-    editedById: String! # ID of the user creating the promise
+    editedById: ID! # ID  IDuser creating the promise
     version: Int!       # Version of the promise
     status: StatusUs!   # Status of the promise
   }
@@ -48,7 +48,7 @@ const typeDefs = gql`
     title: String
     description: String
     status: StatusUs
-    editedById: String! # ID of the user making the edit
+    editedById: ID! # ID  IDuser making the edit
   }
 
   type Query {

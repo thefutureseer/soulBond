@@ -21,11 +21,12 @@
     ],
     "paths": {
       "components/*":  ["./src/app/components/*"],
-      "api/*":["src/graphql/*"],
+      "api/*":["./src/graphql/*"],
       "app/*": ["./src/app/*"], 
       "styles/*": ["./src/styles/*"],
       "types/*": ["./src/app/types/*"],
-      "graphql/*": ["./src/app/graphql/*"]
+      "graphql/*": ["./src/app/graphql/*"],
+      "utils/*": ["./src/app/utils/*"]
     }
   },
   "include": ["src","next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],

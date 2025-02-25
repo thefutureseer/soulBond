@@ -1,5 +1,5 @@
 import { gql } from '@apollo/client';
-import { CreatePromiseInput } from 'app/types/graphql';
+import { CreatePromiseInput, UpdatePromiseInput} from '../types/graphql.d';
 
 // Define the mutations
 export const CREATE_PROMISE = gql`
@@ -18,23 +18,6 @@ export const CREATE_PROMISE = gql`
       createdAt
       updatedAt
       status
-    }
-  }
-`;
-
-export const UPDATE_PROMISE = gql`
-  mutation UpdatePromise($id: string,$input: UpdatePromiseInput!) {
-    updatePromise(id:$id, input: $input) {
-      id
-      title
-      description
-      status
-      createdAt
-      updatedAt
-      editedById {
-        id
-        name
-      }
     }
   }
 `;
@@ -76,6 +59,21 @@ export const GET_PROMISE = gql`
       createdAt
       updatedAt
       status
+    }
+  }
+`;
+
+export const UPDATE_PROMISE = gql`
+  mutation UpdatePromise($id: ID!,$input: UpdatePromiseInput!) {
+    updatePromise(id: $id, input: $input) {
+      id
+      title
+      description
+      status
+      editedById
+      version
+      createdAt
+      updatedAt
     }
   }
 `;

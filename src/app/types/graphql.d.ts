@@ -85,5 +85,4 @@ export type Mutation = {
   createUser: (input: CreateUserInput) => User; // Create a new user
   createPromise: (input: CreatePromiseInput) => PromiseType; // Create a new promise
   updatePromise: (input: UpdatePromiseInput) => PromiseType; // Update an existing promise
-  editedPromise: (input: UpdatePromiseInput) => PromiseType;
 };

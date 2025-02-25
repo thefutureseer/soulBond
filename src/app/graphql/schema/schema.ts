@@ -44,7 +44,6 @@ const typeDefs = gql`
   }
 
   input UpdatePromiseInput {
-    id: ID!
     title: String
     description: String
     status: StatusUs
@@ -52,21 +51,18 @@ const typeDefs = gql`
   }
 
   type Query {
-    getUsers: [User!]!
+    getUsers: [User]!
     getUser(id: ID!): User
     getPromises: [PromiseType]
     getPromise(id: ID!): PromiseType
+    testQuery: String
   }
 
   type Mutation {
     createUser(input: CreateUserInput!): User!
     createPromise(input: CreatePromiseInput!): PromiseType!
-    updatePromise(input: UpdatePromiseInput!): PromiseType
+    updatePromise(id: ID!, input: UpdatePromiseInput!): PromiseType
   }
-
-  type Query {
-  testQuery: String
-}
 `;
 
 export default typeDefs;

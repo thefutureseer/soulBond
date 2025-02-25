@@ -83,7 +83,6 @@ const resolvers = {
     // Update an existing promise
     updatePromise: async (_: unknown, {id, input }: {id:string, input: UpdatePromiseInput }, context: Context) => {
       const { prisma } = context;
-      const status = input.status as StatusUs | undefined; // Optional status update
 
       const updatedPromise = await prisma.soulpromise.update({
         where: { id }, // Find promise by ID

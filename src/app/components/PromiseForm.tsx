@@ -55,33 +55,36 @@ const PromiseForm = () => {
 
   const handleSubmit = useCallback((e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!title || !description || !editedById) {
+    const userId = editedById || "123e4567-e89b-12d3-a456-426614174000";
+
+    if (!title || !description || !userId) {
       setErrorMessage('Please fill in all fields');
       return;
     }
-
+    
     setErrorMessage(''); // Clear previous errors
     setSuccessMessage(''); // Clear previous success messages
+    
+    // Validate or map the string status to the StatusUs enum.
+    const mappedStatus = StatusUs[status as keyof typeof StatusUs]; 
+    
+    //if `mappedStatus` is not a valid enum value.
+    if (!mappedStatus) {
+      console.error(`Invalid status value: ${status}`);
+      return;
+    }
+    // console.log("variables", title, description, editedById, version, status);
 
-  // Validate or map the string status to the StatusUs enum.
-  const mappedStatus = StatusUs[status as keyof typeof StatusUs]; 
-
-  //if `mappedStatus` is not a valid enum value.
-  if (!mappedStatus) {
-    console.error(`Invalid status value: ${status}`);
-    return;
-  }
-
-    // Call createPromise with the correct structure
-    createPromise({ variables: { input: { title, description, editedById, version, status:mappedStatus } } });
+    // Call createPromise with the correct structure.
+    createPromise({ variables: { input: { title, description, editedById: userId, version, status:mappedStatus } } });
   }, [title, description, editedById, version, status, createPromise]);
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-4">
       <input 
         type="text" 
-        placeholder='Your soul bond user id'
-        value={editedById || "123e4567-e89b-12d3-a456-426614174000"} 
+        placeholder='using false id: 123e4567-e89b-12d3-a456-426614174000'
+        value={editedById} 
         onChange={(e) => setEditedById(e.target.value)} 
         className="p-2 border rounded"
       />

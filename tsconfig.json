@@ -20,13 +20,13 @@
       }
     ],
     "paths": {
-      "components/*":  ["./src/app/components/*"],
-      "api/*":["./src/graphql/*"],
-      "app/*": ["./src/app/*"], 
-      "styles/*": ["./src/styles/*"],
-      "types/*": ["./src/app/types/*"],
-      "graphql/*": ["./src/app/graphql/*"],
-      "utils/*": ["./src/app/utils/*"]
+      "components/*": ["src/components/*"],
+      "app/*": ["src/app/*"], 
+      "types/*": ["src/types/*"],
+      "graphql/*": ["src/graphql/*"],
+      "utils/*": ["src/utils/*"],
+      "styles/*": ["src/styles/*"],
+      "ui/*": ["src/ui/*"],
     }
   },
   "include": ["src","next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],

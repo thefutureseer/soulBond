@@ -1,5 +1,5 @@
-import { Context } from 'types/context'; // Import types for context (includes Prisma and more)
-import { StatusUs, UpdatePromiseInput } from 'types/graphql'; // Import custom types for GraphQL
+import { Context } from 'src/types/context'; // Import types for context (includes Prisma and more)
+import { StatusUs, UpdatePromiseInput } from 'src/types/graphql'; // Import custom types for GraphQL
 
 const resolvers = {
   // Query resolvers (for fetching data)

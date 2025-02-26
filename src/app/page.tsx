@@ -1,7 +1,7 @@
 "use client";
 import React from 'react';
-import PromiseForm from 'app/components/PromiseForm';
-import PromiseList from 'app/components/PromiseList';
+import PromiseForm from 'components/PromiseForm';
+import PromiseList from 'components/PromiseList';
 
 const Home = () => {
   return (

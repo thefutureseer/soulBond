@@ -2,7 +2,7 @@
 
 import React, { useState, useCallback } from 'react';
 import { useMutation, ApolloCache } from '@apollo/client';
-import { GET_PROMISES, CREATE_PROMISE } from '../graphql/promises';
+import { GET_PROMISES, CREATE_PROMISE } from 'graphql/promises';
 import { PromiseType, CreatePromiseResponse, CreatePromiseInput, StatusUs } from 'types/graphql.d';
 import styles from 'styles/styles.module.css';
 

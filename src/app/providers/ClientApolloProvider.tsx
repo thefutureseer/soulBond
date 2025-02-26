@@ -8,7 +8,7 @@ import {
   HttpLink
 } from '@apollo/client';
 // import { createHttpLink } from '@apollo/client/link/http';
-import { ClientApolloProviderProps } from 'types/context';
+import { ClientApolloProviderProps } from 'src/types/context';
 
 // Define the HTTP link for queries and mutations
 const httpLink = new HttpLink({

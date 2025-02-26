@@ -1,4 +1,4 @@
-import prisma from '../src/app/utils/prisma';
+import prisma from '../src/utils/prisma';
 
 async function main() {
   // Create 5 users

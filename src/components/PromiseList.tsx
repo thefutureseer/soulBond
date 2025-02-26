@@ -2,10 +2,10 @@
 
 import React from 'react';
 import { useQuery, useApolloClient } from '@apollo/client';
-import { GET_PROMISES } from '../graphql/promises';
-import { PromiseType, GetPromisesQueryResult } from 'types/graphql';
+import { GET_PROMISES } from 'graphql/promises';
+import { PromiseType, GetPromisesQueryResult } from 'src/types/graphql';
 import { format, isValid } from 'date-fns';
-import { statusColors } from '../ui/statusColors';
+import { statusColors } from 'ui/statusColors';
 
 const PromiseList: React.FC = () => {
   const client = useApolloClient(); // Access Apollo Client

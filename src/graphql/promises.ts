@@ -1,5 +1,5 @@
 import { gql } from '@apollo/client';
-import { CreatePromiseInput, UpdatePromiseInput} from '../types/graphql.d';
+import { CreatePromiseInput, UpdatePromiseInput} from 'types/graphql';
 
 // Define the mutations
 export const CREATE_PROMISE = gql`

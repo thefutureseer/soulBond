@@ -5,7 +5,7 @@ import { useQuery, useMutation } from '@apollo/client';
 import { GET_PROMISE, UPDATE_PROMISE } from 'graphql/promises';
 import {EditButtonFormProps} from '../../../types/graphql'
 import { statusColors } from 'ui/statusColors';
-import styles from 'styles/EditButtonForm.module.css';
+import styles from 'styles/editButtonForm.module.css';
 
 const EditButtonForm: React.FC<EditButtonFormProps> = ({ params }) => {
   const { id } = params; // Get the promise ID from the route params

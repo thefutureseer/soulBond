@@ -83,19 +83,25 @@ const resolvers = {
     // Update an existing promise
     updatePromise: async (_: unknown, {id, input }: {id:string, input: UpdatePromiseInput }, context: Context) => {
       const { prisma } = context;
+      try {
 
-      const updatedPromise = await prisma.soulpromise.update({
-        where: { id }, // Find promise by ID
-        data: {
-          title: input.title || undefined, // Update title if provided
-          description: input.description || undefined, // Update description if provided
-          status: input.status, // Update status if provided
-          editedById: input.editedById, // Set the editor's ID (for now, defaults to John)
-          version: { increment: 1 }, // Increment the version
-        },
-      });
-
-      return updatedPromise;
+        const updatedPromise = await prisma.soulpromise.update({
+          where: { id }, // Find promise by ID
+          data: {
+            title: input.title || undefined, // Update title if provided
+            description: input.description || undefined, // Update description if provided
+            status: input.status, // Update status if provided
+            editedById: input.editedById, // Set the editor's ID (for now, defaults to John)
+            version: { increment: 1 }, // Increment the version
+            updatedAt: input.updatedAt
+          },
+        });
+        
+        return updatedPromise;
+      } catch (error) { 
+        console.error("Error updating promise", error);
+        throw new Error(`Failed to update promise: ${error}`); // Throw error if update fails
+        }
     },
   },
 

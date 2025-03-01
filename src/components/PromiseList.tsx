@@ -33,7 +33,7 @@ const PromiseList: React.FC = () => {
             </div>
             <p className="text-sm text-gray-600">
               Last update was: {(() => {
-                const createdAtDate = new Date(Number(soulpromise.createdAt));
+                const createdAtDate = new Date(Number(soulpromise.updatedAt));
 
                 if (!isValid(createdAtDate)) {
                   return 'Invalid date';

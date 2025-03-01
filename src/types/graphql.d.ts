@@ -67,11 +67,11 @@ export type CreatePromiseInput = {
 };
 
 export type UpdatePromiseInput = {
-  id: string;
   title?: string;
   description?: string;
   status?: StatusUs;
-  editedById: string
+  editedById: string;
+  updatedAt: Date;
 };
 
 export type Query = {

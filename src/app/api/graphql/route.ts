@@ -6,7 +6,7 @@ import { makeExecutableSchema } from '@graphql-tools/schema';
 import resolvers from 'graphql/resolvers';
 import typeDefs from 'graphql/schema';
 import prisma from 'src/utils/prisma';
-import {Context} from 'src/types/context';
+import { Context } from 'src/types/context';
 
 // Define the GraphQL schema
 const schema = makeExecutableSchema({ typeDefs, resolvers });

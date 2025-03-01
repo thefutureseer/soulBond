@@ -1,6 +1,7 @@
 'use client'
 
 import React, { useState, useEffect } from 'react';
+import { format, isValid } from 'date-fns';
 import { useQuery, useMutation } from '@apollo/client';
 import { GET_PROMISE, UPDATE_PROMISE } from 'graphql/promises';
 import {EditButtonFormProps} from '../../../types/graphql'
@@ -12,9 +13,11 @@ const EditButtonForm: React.FC<EditButtonFormProps> = ({ params }) => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [status, setStatus] = useState('');
+  const [updatedAt, setCreated] = useState('');
   //Error message
   const [message, setMessage] = useState('');
-
+  const [editedById, setEditedById] = useState('');
+  
   const { data, loading, error } = useQuery(GET_PROMISE, {
     variables: { id },
   });
@@ -22,7 +25,8 @@ const EditButtonForm: React.FC<EditButtonFormProps> = ({ params }) => {
   //If updating is true then submit button is disabled.
   const [updatePromise, {loading: updating}] = useMutation(UPDATE_PROMISE, {
     onCompleted: ()=> setMessage("Update complete"),
-    onError: (err)=> setMessage(`error: ${err.message}`)
+    onError: (err)=> setMessage(`error: ${err.message}`),
+    refetchQueries: [{ query: GET_PROMISE, variables: { id } }],  // Refetch the promise after updating
   })
 
   useEffect(() => {
@@ -30,7 +34,8 @@ const EditButtonForm: React.FC<EditButtonFormProps> = ({ params }) => {
       setTitle(data.getPromise.title);
       setDescription(data.getPromise.description);
       setStatus(data.getPromise.status);
-    }
+      setCreated(data.getPromise.updatedAt);
+      setEditedById(data.getPromise.editedById);    }
   }, [data]);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -43,7 +48,8 @@ const EditButtonForm: React.FC<EditButtonFormProps> = ({ params }) => {
             title,
             description,
             status,
-            editedById: "123e4567-e89b-12d3-a456-426614174000" // Hardcoded user ID for now
+            editedById: "123e4567-e89b-12d3-a456-426614174000", // Hardcoded user ID for now
+            updatedAt: new Date().toISOString(),
           }
         },
       });
@@ -82,7 +88,7 @@ const EditButtonForm: React.FC<EditButtonFormProps> = ({ params }) => {
           />
         </div>
         <div className="mb-4">
-          <label className={styles.label}>Status updater:</label>
+          <label className={styles.label}>Update status here:</label>
           <div className={`${styles.selectWrapper} ${statusColors[status]}`}>
             <select
               className={styles.select}
@@ -96,12 +102,23 @@ const EditButtonForm: React.FC<EditButtonFormProps> = ({ params }) => {
           </div>
         </div>
         <div className="flex items-center justify-between">
+        <p className="text-sm text-gray-600">
+          Updated at: {(() => {
+            const createdAtDate = new Date(Number(updatedAt));
+
+            if (!isValid(createdAtDate)) {
+              return 'Invalid date';
+            }
+
+            return format(createdAtDate, 'MMMM dd, yyyy HH:mm:ss');
+          })()}
+        </p>
           <button
             className={styles.button}
             type="submit"
             disabled={updating}
           >
-            Update
+            Submit
           </button>
         </div>
       </form>

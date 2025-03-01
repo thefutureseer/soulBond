@@ -47,7 +47,8 @@ const typeDefs = gql`
     title: String
     description: String
     status: StatusUs
-    editedById: ID! # ID  IDuser making the edit
+    editedById: ID!
+    updatedAt: String
   }
 
   type Query {

@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { format, isValid } from 'date-fns';
 import { useQuery, useMutation } from '@apollo/client';
 import { GET_PROMISE, UPDATE_PROMISE } from 'graphql/promises';
+import { useRouter } from 'next/router';
 import {EditButtonFormProps} from '../../../types/graphql'
 import { statusColors } from 'ui/statusColors';
 import styles from 'styles/editButtonForm.module.css';
@@ -18,15 +19,21 @@ const EditButtonForm: React.FC<EditButtonFormProps> = ({ params }) => {
   const [message, setMessage] = useState('');
   const [editedById, setEditedById] = useState('');
   
+  const router = useRouter();
+
   const { data, loading, error } = useQuery(GET_PROMISE, {
     variables: { id },
   });
 
   //If updating is true then submit button is disabled.
   const [updatePromise, {loading: updating}] = useMutation(UPDATE_PROMISE, {
-    onCompleted: ()=> setMessage("Update complete"),
+    onCompleted: ()=> {
+      setMessage("Update complete"),
+
+      router.push(`/`)
+   },
+
     onError: (err)=> setMessage(`error: ${err.message}`),
-    refetchQueries: [{ query: GET_PROMISE, variables: { id } }],  // Refetch the promise after updating
   })
 
   useEffect(() => {

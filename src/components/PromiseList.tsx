@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useQuery, useApolloClient } from '@apollo/client';
 import { GET_PROMISES } from 'graphql/promises';
 import { PromiseType, GetPromisesQueryResult } from 'src/types/graphql';
@@ -9,7 +9,7 @@ import { statusColors } from 'ui/statusColors';
 
 const PromiseList: React.FC = () => {
   const client = useApolloClient(); // Access Apollo Client
-  const { loading, error, data } = useQuery<GetPromisesQueryResult>(GET_PROMISES);
+  const { loading, error, data, refetch } = useQuery<GetPromisesQueryResult>(GET_PROMISES);
 
   const handleEdit = (id: string) => {
     // Reset store before navigating to the edit page
@@ -18,12 +18,16 @@ const PromiseList: React.FC = () => {
     });
   };
 
+  useEffect(() => {
+    refetch(); // Refetch data when the component mounts
+  }, []);
+
   if (loading) return <p>Loading promises...</p>;
   if (error) return <p>Error fetching promises: {error.message}</p>;
 
   return (
     <div>
-      {data?.getPromises?.length ?  (
+      {data?.getPromises?.length ? (
         (data.getPromises ?? []).map((soulpromise: PromiseType) => (
           <div key={soulpromise.id} className="mb-4 p-4 border rounded">
             <h3 className="text-xl font-semibold">{soulpromise.title}</h3>

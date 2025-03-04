@@ -3,9 +3,9 @@
 import React, { useState, useEffect } from 'react';
 import { format, isValid } from 'date-fns';
 import { useQuery, useMutation } from '@apollo/client';
+// import { useRouter } from 'next/router';
 import { GET_PROMISE, UPDATE_PROMISE } from 'graphql/promises';
-import { useRouter } from 'next/router';
-import {EditButtonFormProps} from '../../../types/graphql'
+import { EditButtonFormProps } from '../../../types/graphql';
 import { statusColors } from 'ui/statusColors';
 import styles from 'styles/editButtonForm.module.css';
 
@@ -15,26 +15,22 @@ const EditButtonForm: React.FC<EditButtonFormProps> = ({ params }) => {
   const [description, setDescription] = useState('');
   const [status, setStatus] = useState('');
   const [updatedAt, setCreated] = useState('');
-  //Error message
-  const [message, setMessage] = useState('');
+  const [message, setMessage] = useState(''); // Error message
   const [editedById, setEditedById] = useState('');
-  
-  const router = useRouter();
+  // const router = useRouter();
 
   const { data, loading, error } = useQuery(GET_PROMISE, {
     variables: { id },
   });
 
-  //If updating is true then submit button is disabled.
-  const [updatePromise, {loading: updating}] = useMutation(UPDATE_PROMISE, {
-    onCompleted: ()=> {
-      setMessage("Update complete"),
-
-      router.push(`/`)
-   },
-
-    onError: (err)=> setMessage(`error: ${err.message}`),
-  })
+  const [updatePromise, { loading: updating }] = useMutation(UPDATE_PROMISE, {
+    onCompleted: () => {
+      setMessage("Update complete");
+      // router.push('/'); // Redirect to the main page
+      window.location.assign('/') // Full page reload which is less efficient
+    },
+    onError: (err) => setMessage(`Error: ${err.message}`),
+  });
 
   useEffect(() => {
     if (data?.getPromise) {
@@ -42,7 +38,8 @@ const EditButtonForm: React.FC<EditButtonFormProps> = ({ params }) => {
       setDescription(data.getPromise.description);
       setStatus(data.getPromise.status);
       setCreated(data.getPromise.updatedAt);
-      setEditedById(data.getPromise.editedById);    }
+      setEditedById(data.getPromise.editedById);
+    }
   }, [data]);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -74,7 +71,7 @@ const EditButtonForm: React.FC<EditButtonFormProps> = ({ params }) => {
       <form onSubmit={handleSubmit} className={styles.form}>
         <div className="mb-4">
           <label className={styles.label}>Edited by user ID:</label>
-          <p className="text-gray-900">123e4567-e89b-12d3-a456-426614174000</p>
+          <p className="text-gray-900">{editedById}</p>
         </div>
         <div className="mb-4">
           <label className={styles.label}>Title:</label>

@@ -1,9 +1,9 @@
-'use client'
+'use client' // This directive indicates that this file should be treated as a client-side component in Next.js
 
 import React, { useState, useEffect } from 'react';
 import { format, isValid } from 'date-fns';
 import { useQuery, useMutation } from '@apollo/client';
-// import { useRouter } from 'next/router';
+// import { useRouter } from 'next/router'; // Uncomment if you want to use client-side navigation
 import { GET_PROMISE, UPDATE_PROMISE } from 'graphql/promises';
 import { EditButtonFormProps } from '../../../types/graphql';
 import { statusColors } from 'ui/statusColors';
@@ -11,27 +11,57 @@ import styles from 'styles/editButtonForm.module.css';
 
 const EditButtonForm: React.FC<EditButtonFormProps> = ({ params }) => {
   const { id } = params; // Get the promise ID from the route params
-  const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
-  const [status, setStatus] = useState('');
-  const [updatedAt, setCreated] = useState('');
-  const [message, setMessage] = useState(''); // Error message
-  const [editedById, setEditedById] = useState('');
-  // const router = useRouter();
+  const [title, setTitle] = useState(''); // State for the title
+  const [description, setDescription] = useState(''); // State for the description
+  const [status, setStatus] = useState(''); // State for the status
+  const [updatedAt, setCreated] = useState(''); // State for the updated at timestamp
+  const [message, setMessage] = useState(''); // State for the message (error or success)
+  const [editedById, setEditedById] = useState(''); // State for the edited by user ID
+  // const router = useRouter(); // Uncomment if you want to use client-side navigation
 
+  // Fetch the promise data using the GET_PROMISE query
   const { data, loading, error } = useQuery(GET_PROMISE, {
     variables: { id },
   });
 
+  // Define the mutation for updating the promise
   const [updatePromise, { loading: updating }] = useMutation(UPDATE_PROMISE, {
     onCompleted: () => {
       setMessage("Update complete");
-      // router.push('/'); // Redirect to the main page
-      window.location.assign('/') // Full page reload which is less efficient
+      window.location.assign('/'); // Redirect to the main page with a full page reload
+      // router.push('/'); // Uncomment if you want to use client-side navigation
     },
-    onError: (err) => setMessage(`Error: ${err.message}`),
+    onError: (err) => setMessage(`Error: ${err.message}`), // Handle errors
+    optimisticResponse: {
+      __typename: 'Mutation',
+      updatePromise: {
+        __typename: 'Promise',
+        id,
+        title,
+        description,
+        status, // of the soul promise
+        updatedAt: new Date().toISOString(),
+        editedById: "123e4567-e89b-12d3-a456-426614174000", // Hardcoded user ID for now
+      },
+    },
+    update: (cache, { data: { updatePromise } }) => {
+      // Update the cache with the new promise data
+      cache.modify({
+        fields: {
+          getPromise(existingPromiseRefs = {}, { readField }) {
+              if (readField('id', existingPromiseRefs) === id) {
+              return {
+                ...existingPromiseRefs,
+                ...updatePromise,
+              };
+            }
+          }
+        },
+      });
+    },
   });
 
+  // Update the state with the fetched promise data
   useEffect(() => {
     if (data?.getPromise) {
       setTitle(data.getPromise.title);
@@ -42,6 +72,7 @@ const EditButtonForm: React.FC<EditButtonFormProps> = ({ params }) => {
     }
   }, [data]);
 
+  // Handle form submission
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
@@ -62,8 +93,8 @@ const EditButtonForm: React.FC<EditButtonFormProps> = ({ params }) => {
     }
   }
 
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error: {error.message}</p>;
+  if (loading) return <p>Loading...</p>; // Show loading state
+  if (error) return <p>Error: {error.message}</p>; // Show error state
 
   return (
     <div className={styles.container}>

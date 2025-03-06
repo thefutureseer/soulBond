@@ -9,7 +9,7 @@ export type User = {
   id: string;
   name: string;
   email: string;
-  edits: [PromiseType]; // Array of related promises
+  edits: PromiseType[]; // Array of related promises
   createdAt: Date;
   updatedAt: Date;
 };
@@ -28,7 +28,7 @@ export type PromiseType = {
 
 // Define the structure of the response for GET_PROMISES
 export interface GetPromisesQueryResult {
-  getPromises: [PromiseType]; // An array of PromiseType
+  getPromises: PromiseType[]; // An array of PromiseType
 }
 
 //Edit button
@@ -75,9 +75,9 @@ export type UpdatePromiseInput = {
 };
 
 export type Query = {
-  getUsers: [User]; // Fetches an array of users
+  getUsers: User[]; // Fetches an array of users
   getUser: (id: string) => User | null; // Fetch a single user by ID
-  getPromises: [PromiseType]; // Fetches an array of promises
+  getPromises: PromiseType[]; // Fetches an array of promises
   getPromise: (id: string) => PromiseType | null; // Fetch a single promise by ID
 };
 

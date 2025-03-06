@@ -3,9 +3,8 @@
 import React, { useState, useEffect } from 'react';
 import { format, isValid } from 'date-fns';
 import { useQuery, useMutation } from '@apollo/client';
-// import { useRouter } from 'next/router'; // Uncomment if you want to use client-side navigation
 import { GET_PROMISE, UPDATE_PROMISE } from 'graphql/promises';
-import { EditButtonFormProps } from '../../../types/graphql';
+import { EditButtonFormProps, PromiseType } from 'types/graphql';
 import { statusColors } from 'ui/statusColors';
 import styles from 'styles/editButtonForm.module.css';
 
@@ -17,6 +16,7 @@ const EditButtonForm: React.FC<EditButtonFormProps> = ({ params }) => {
   const [updatedAt, setCreated] = useState(''); // State for the updated at timestamp
   const [message, setMessage] = useState(''); // State for the message (error or success)
   const [editedById, setEditedById] = useState(''); // State for the edited by user ID
+  const [edits, setEdits]= useState<PromiseType[]>([]); // State for the edits
   // const router = useRouter(); // Uncomment if you want to use client-side navigation
 
   // Fetch the promise data using the GET_PROMISE query
@@ -69,6 +69,7 @@ const EditButtonForm: React.FC<EditButtonFormProps> = ({ params }) => {
       setStatus(data.getPromise.status);
       setCreated(data.getPromise.updatedAt);
       setEditedById(data.getPromise.editedById);
+      setEdits(data.getPromise.editedBy.edits);
     }
   }, [data]);
 
@@ -158,6 +159,32 @@ const EditButtonForm: React.FC<EditButtonFormProps> = ({ params }) => {
         </div>
       </form>
       {message && <p className={styles.message}>{message}</p>}
+      <div className={styles.edits}>
+        <h3>Previous Edits</h3>
+        { edits.length > 0 ? (
+          edits.filter(edit => edit.id === id).map((edit) => (
+            <div key={edit.id} className="mb-4 p-4 border rounded">
+              <h4 className="text-lg font-semibold">Version {edit.version}</h4>
+              <p>{edit.title}</p>
+              <p>{edit.description}</p>
+              <p>Status: {edit.status}</p>
+              <p className="text-sm text-gray-600">
+                Created at: {(() => {
+                  let createdAtDate = new Date(Number(edit.createdAt));
+                  if(!isValid(createdAtDate)) {
+                    return 'Invalid date';
+                  }
+                  return format(createdAtDate, 'MMMM dd, yyyy HH:mm:ss')
+                })()}
+              </p>
+            </div>
+          
+          ))
+        ) : (
+              <p>No edits found.</p>  
+            )
+      }
+      </div>
     </div>
   );
 };

@@ -83,3 +83,35 @@
   margin-top: 1rem; /* mt-4 */
   color: #ef4444; /* text-red-500 */
 }
+
+.edits {
+  margin-top: 20px;
+  color: blue
+}
+
+.edits h3 {
+  font-size: 20px;
+  color: black;
+  margin-bottom: 10px;
+}
+
+.edits .edit {
+  margin-bottom: 20px;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.edits .edit h4 {
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+
+.edits .edit p {
+  margin-bottom: 5px;
+}
+
+.edits .edit .text-sm {
+  font-size: 14px;
+  color: #666;
+}

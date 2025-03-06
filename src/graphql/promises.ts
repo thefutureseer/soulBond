@@ -53,6 +53,14 @@ export const GET_PROMISE = gql`
         id
         name
         email
+        edits {
+          id
+          title
+          description
+          status
+          createdAt 
+          version
+        }
       }
       editedById
       version

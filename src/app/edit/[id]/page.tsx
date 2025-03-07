@@ -1,5 +1,4 @@
-'use client' // This directive indicates that this file should be treated as a client-side component in Next.js
-
+'use client' 
 import React, { useState, useEffect } from 'react';
 import { format, isValid } from 'date-fns';
 import { useQuery, useMutation } from '@apollo/client';
@@ -17,7 +16,6 @@ const EditButtonForm: React.FC<EditButtonFormProps> = ({ params }) => {
   const [message, setMessage] = useState(''); // State for the message (error or success)
   const [editedById, setEditedById] = useState(''); // State for the edited by user ID
   const [edits, setEdits]= useState<PromiseType[]>([]); // State for the edits
-  // const router = useRouter(); // Uncomment if you want to use client-side navigation
 
   // Fetch the promise data using the GET_PROMISE query
   const { data, loading, error } = useQuery(GET_PROMISE, {
@@ -69,7 +67,7 @@ const EditButtonForm: React.FC<EditButtonFormProps> = ({ params }) => {
       setStatus(data.getPromise.status);
       setCreated(data.getPromise.updatedAt);
       setEditedById(data.getPromise.editedById);
-      setEdits(data.getPromise.editedBy.edits);
+      setEdits(data.getPromise.edits);
     }
   }, [data]);
 
@@ -161,8 +159,10 @@ const EditButtonForm: React.FC<EditButtonFormProps> = ({ params }) => {
       {message && <p className={styles.message}>{message}</p>}
       <div className={styles.edits}>
         <h3>Previous Edits</h3>
-        { edits.length > 0 ? (
+        {
+         edits.length > 0 ? (
           edits.filter(edit => edit.id === id).map((edit) => (
+            console.log("this is .edit.edits 165 ",  edit.edits ),
             <div key={edit.id} className="mb-4 p-4 border rounded">
               <h4 className="text-lg font-semibold">Version {edit.version}</h4>
               <p>{edit.title}</p>
@@ -180,7 +180,8 @@ const EditButtonForm: React.FC<EditButtonFormProps> = ({ params }) => {
             </div>
           
           ))
-        ) : (
+        ) : ( console.log("this is edits type", typeof edits ), 
+
               <p>No edits found.</p>  
             )
       }

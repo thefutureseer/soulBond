@@ -121,6 +121,12 @@ const resolvers = {
     editedBy: async (parent: any, _: any, { prisma }: Context) => {
       return await prisma.user.findUnique({ where: { id: parent.editedById } }); // Fetch the user by ID
     },
+    // Resolve the `edits` field (all related edits for the promise)
+    edits: async (parent: any, _: any, { prisma }: Context) => {
+      return await prisma.soulpromise.findMany({
+        where: { editedById: parent.id }, // Fetch related edits for the promise
+      });
+    },
   },
 };
 

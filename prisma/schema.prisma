@@ -28,6 +28,9 @@ model soulpromise {
   createdAt   DateTime   @default(now())           // Timestamp for when the promise was created
   updatedAt   DateTime   @updatedAt                // Automatically updated timestamp for the last update
   status      status_us  @default(PENDING)         // Using enum for better validation
+  edits       soulpromise[] @relation("PromiseEdits") // Self-referential relationship for edits
+  parentId    String?      // Optional field to link to the parent promise
+  parent      soulpromise? @relation("PromiseEdits", fields: [parentId], references: [id])
 }
 
 // Enum for status

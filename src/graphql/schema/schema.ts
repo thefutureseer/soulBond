@@ -24,6 +24,7 @@ const typeDefs = gql`
     description: String!
     editedBy: User!          # User who last edited this promise
     editedById: ID!      # ID  IDuser who last edited
+    edits: [PromiseType!]!   # Promises edited by this promise
     version: Int!
     createdAt: String!
     updatedAt: String!

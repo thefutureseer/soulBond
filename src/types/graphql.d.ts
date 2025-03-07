@@ -20,6 +20,7 @@ export type PromiseType = {
   description: string;
   editedBy: User; // User who edited the promise
   editedById: string;
+  edits: PromiseType[]; // Array of related promises
   version: number;
   createdAt: Date;
   updatedAt: Date;

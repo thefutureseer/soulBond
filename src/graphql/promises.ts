@@ -53,7 +53,9 @@ export const GET_PROMISE = gql`
         id
         name
         email
-        edits {
+      }
+      editedById
+      edits {
           id
           title
           description
@@ -61,8 +63,6 @@ export const GET_PROMISE = gql`
           createdAt 
           version
         }
-      }
-      editedById
       version
       createdAt
       updatedAt

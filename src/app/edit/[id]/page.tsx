@@ -16,10 +16,15 @@ const EditButtonForm: React.FC<EditButtonFormProps> = ({ params }) => {
   const [message, setMessage] = useState(''); // State for the message (error or success)
   const [editedById, setEditedById] = useState(''); // State for the edited by user ID
   const [edits, setEdits]= useState<PromiseType[]>([]); // State for the edits
+  const [parentId, setParentId] = useState(''); // State for the parent ID  
+  const [offset, setOffset] = useState(0); // State for the offset of pagination
+  const [hasMore, setHasMore] = useState(true); // State for checking if there are more edits
+
+  const limit = 2; // set limit to the number of edits per click
 
   // Fetch the promise data using the GET_PROMISE query
-  const { data, loading, error } = useQuery(GET_PROMISE, {
-    variables: { id },
+  const { data, loading, error, fetchMore } = useQuery(GET_PROMISE, {
+    variables: { id, offset, limit },
   });
 
   // Define the mutation for updating the promise
@@ -27,36 +32,8 @@ const EditButtonForm: React.FC<EditButtonFormProps> = ({ params }) => {
     onCompleted: () => {
       setMessage("Update complete");
       window.location.assign('/'); // Redirect to the main page with a full page reload
-      // router.push('/'); // Uncomment if you want to use client-side navigation
     },
     onError: (err) => setMessage(`Error: ${err.message}`), // Handle errors
-    optimisticResponse: {
-      __typename: 'Mutation',
-      updatePromise: {
-        __typename: 'Promise',
-        id,
-        title,
-        description,
-        status, // of the soul promise
-        updatedAt: new Date().toISOString(),
-        editedById: "123e4567-e89b-12d3-a456-426614174000", // Hardcoded user ID for now
-      },
-    },
-    update: (cache, { data: { updatePromise } }) => {
-      // Update the cache with the new promise data
-      cache.modify({
-        fields: {
-          getPromise(existingPromiseRefs = {}, { readField }) {
-              if (readField('id', existingPromiseRefs) === id) {
-              return {
-                ...existingPromiseRefs,
-                ...updatePromise,
-              };
-            }
-          }
-        },
-      });
-    },
   });
 
   // Update the state with the fetched promise data
@@ -68,6 +45,7 @@ const EditButtonForm: React.FC<EditButtonFormProps> = ({ params }) => {
       setCreated(data.getPromise.updatedAt);
       setEditedById(data.getPromise.editedById);
       setEdits(data.getPromise.edits);
+      setParentId(data.getPromise.parent?.id || ''); // Set parent ID
     }
   }, [data]);
 
@@ -84,13 +62,36 @@ const EditButtonForm: React.FC<EditButtonFormProps> = ({ params }) => {
             status,
             editedById: "123e4567-e89b-12d3-a456-426614174000", // Hardcoded user ID for now
             updatedAt: new Date().toISOString(),
+            parentId: parentId, // Set parent ID 
           }
         },
       });
     } catch (err) {
       console.error(err);
     }
-  }
+  };
+
+  //load more edits
+  const loadMoreEdits = () => {
+    //fetch more edits
+    fetchMore({
+      variables: {
+        offset: edits.length,
+        limit,
+      },
+    }).then((result) => {
+      //check if there are more edits
+      if (result.data.getPromise.edits.length < limit) {
+        setHasMore(false);
+      }
+      // Append new edits to the existing ones
+      setEdits((prevEdits) => [...prevEdits, ...result.data.getPromise.edits]);
+      //update offset
+      setOffset((prevOffset) => prevOffset + limit);
+    }).catch((err) => {
+      console.error('Fetch More Error:', err);
+    });
+  };
 
   if (loading) return <p>Loading...</p>; // Show loading state
   if (error) return <p>Error: {error.message}</p>; // Show error state
@@ -135,6 +136,15 @@ const EditButtonForm: React.FC<EditButtonFormProps> = ({ params }) => {
             </select>
           </div>
         </div>
+        <div className="mb-4">
+          <label className={styles.label}>Parent ID:</label>
+          <input
+            type="text"
+            className={styles.input}
+            value={parentId}
+            onChange={(e) => setParentId(e.target.value)}
+          />
+        </div>
         <div className="flex items-center justify-between">
         <p className="text-sm text-gray-600">
           Updated at: {(() => {
@@ -161,7 +171,8 @@ const EditButtonForm: React.FC<EditButtonFormProps> = ({ params }) => {
         <h3>Previous Edits</h3>
         {
          edits.length > 0 ? (
-          edits.filter(edit => edit.id === id).map((edit) => (
+          edits.map((edit) => (
+            console.log("this is .edit full & .edits 165 ",  edit ),
             console.log("this is .edit.edits 165 ",  edit.edits ),
             <div key={edit.id} className="mb-4 p-4 border rounded">
               <h4 className="text-lg font-semibold">Version {edit.version}</h4>
@@ -185,6 +196,14 @@ const EditButtonForm: React.FC<EditButtonFormProps> = ({ params }) => {
               <p>No edits found.</p>  
             )
       }
+      {hasMore && (
+        <button
+          className={styles.button}
+          onClick={loadMoreEdits}
+        >
+          Load More
+        </button>
+      )}
       </div>
     </div>
   );

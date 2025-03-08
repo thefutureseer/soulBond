@@ -44,31 +44,40 @@ export const GET_PROMISES = gql`
 
 // Define the GET_PROMISE query to fetch a specific promise by ID
 export const GET_PROMISE = gql`
-  query GetPromise($id: ID!) {
+  query GetPromise($id: ID!, $offset: Int, $limit: Int) {
     getPromise(id: $id) {
       id
+      version
       title
       description
+      status
+      createdAt
+      updatedAt
+      editedById
       editedBy {
         id
         name
         email
       }
-      editedById
-      edits {
+      edits(offset: $offset, limit: $limit) {
           id
           title
           description
           status
           createdAt 
           version
-        }
-      version
-      createdAt
-      updatedAt
-      status
-    }
+          parentId
+      }
+      parent {
+        id
+        title
+        description
+        status
+        createdAt
+        updatedAt
+      }
   }
+}
 `;
 
 export const UPDATE_PROMISE = gql`
@@ -82,6 +91,7 @@ export const UPDATE_PROMISE = gql`
       version
       createdAt
       updatedAt
+      parentId
     }
   }
 `;

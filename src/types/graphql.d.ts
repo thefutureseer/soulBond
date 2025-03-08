@@ -20,11 +20,17 @@ export type PromiseType = {
   description: string;
   editedBy: User; // User who edited the promise
   editedById: string;
-  edits: PromiseType[]; // Array of related promises
+  edits: Edits; // Array of related promises
   version: number;
   createdAt: Date;
   updatedAt: Date;
   status: StatusUs; // Enum value for status
+  parentId: string;
+  parent: PromiseType | null; // Parent promise or null if none
+};
+
+export type Edits = {
+  resluts: PromiseType[];
 };
 
 // Define the structure of the response for GET_PROMISES
@@ -73,6 +79,7 @@ export type UpdatePromiseInput = {
   status?: StatusUs;
   editedById: string;
   updatedAt: Date;
+  parentId?: string;
 };
 
 export type Query = {

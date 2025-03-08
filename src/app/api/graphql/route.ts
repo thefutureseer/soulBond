@@ -17,6 +17,10 @@ const apolloServer = new ApolloServer<Context>({
   persistedQueries: {
     cache: new InMemoryLRUCache({ maxSize: 100 }), // Cache up to 100 queries
   },
+  formatError: (error) => {
+    console.error(error);
+    return error;
+  },
 });
 
 // Create Apollo handler

@@ -39,6 +39,8 @@ const resolvers = {
         where: { id }, // Fetch promise by ID
         include: {
           editedBy: true, // Include the user who edited the promise
+          edits: true, // Include related edits for the promise
+          parent: true, // Include the parent promise (if it exists)  
         },
       });
       
@@ -93,7 +95,8 @@ const resolvers = {
             status: input.status, // Update status if provided
             editedById: input.editedById, // Set the editor's ID (for now, defaults to John)
             version: { increment: 1 }, // Increment the version
-            updatedAt: input.updatedAt
+            updatedAt: input.updatedAt,
+            parentId: input.parentId || undefined, // Update parent ID if provided  
           },
         });
         
@@ -127,6 +130,11 @@ const resolvers = {
         where: { editedById: parent.id }, // Fetch related edits for the promise
       });
     },
+    // Resolve the `parent` field (find the parent promise, if it exists)
+    parent: async (parent: any, _: any, { prisma }: Context) => {
+      if (!parent.parentId) return null; // Return null if no parent ID is provided
+      return await prisma.soulpromise.findUnique({ where: { id: parent.parentId } }); // Fetch the parent promise by ID
+    }
   },
 };
 

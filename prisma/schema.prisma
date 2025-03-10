@@ -17,20 +17,29 @@ model user {
   updatedAt DateTime    @updatedAt              // Automatically updated timestamp for when the user was last updated
 }
 
-// soulPromise model: Represents the promise history/versions of document edits
+// soulPromise model: original and current promise made 
 model soulpromise {
   id          String      @id @default(uuid())     // Primary key
   title       String                               // Title of the promise
   description String                               // Description or content of the promise edit
-  editedBy    user       @relation(fields: [editedById], references: [id]) // Many-to-one relationship with user
-  editedById  String                               // Foreign key linking to user
   version     Int        @default(0)               // Version number of this edit
   createdAt   DateTime   @default(now())           // Timestamp for when the promise was created
   updatedAt   DateTime   @updatedAt                // Automatically updated timestamp for the last update
   status      status_us  @default(PENDING)         // Using enum for better validation
-  edits       soulpromise[] @relation("PromiseEdits") // Self-referential relationship for edits
+  edits       edit[]    // A promise can have multiple edits
+}
+
+//Stores separaterepresentations of the soulpromise history/versions of document edits.
+model edits {
+  id          String      @id @default(uuid())
+  editedBy    user       @relation(fields: [editedById], references: [id]) // Many-to-one relationship with user
+  editedById  String                               // Foreign key linking to user
   parentId    String?      // Optional field to link to the parent promise
   parent      soulpromise? @relation("PromiseEdits", fields: [parentId], references: [id])
+  promise     soulpromise @relation(fields: [promiseId], references: [id], onDelete: Cascade)
+  promiseId   String
+  changes     Json       // Stores the changes in JSON format
+  createdAt   DateTime   @default(now())
 }
 
 // Enum for status

@@ -18,9 +18,7 @@ export type PromiseType = {
   id: string;
   title: string;
   description: string;
-  editedBy: User; // User who edited the promise
-  editedById: string;
-  edits: Edits; // Array of related promises
+  edits: Edits[]; // Array of related promises
   version: number;
   createdAt: Date;
   updatedAt: Date;
@@ -30,7 +28,15 @@ export type PromiseType = {
 };
 
 export type Edits = {
-  resluts: PromiseType[];
+  id: string;
+  editedBy: User; // User who made the edit
+  editedById: string;
+  parentId?: string;
+  parent?: PromiseType | null; // Parent promise or null if none
+  promiseId: string;
+  promise: PromiseType; // The promise that was edited
+  changes: Record <string, any>; // Stores the changes in JSON format
+  createdAt: Date;
 };
 
 // Define the structure of the response for GET_PROMISES
@@ -67,7 +73,6 @@ export type CreatePromiseInput = {
   input: {
     title: string;        // Title of the promise
     description: string;  // Description of the promise
-    editedById: string;   // ID of the user who edited the promise
     version: number;
     status: StatusUs;
   };

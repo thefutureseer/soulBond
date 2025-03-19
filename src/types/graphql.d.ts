@@ -23,8 +23,6 @@ export type PromiseType = {
   createdAt: Date;
   updatedAt: Date;
   status: StatusUs; // Enum value for status
-  parentId: string;
-  parent: PromiseType | null; // Parent promise or null if none
 };
 
 export type Edits = {
@@ -33,8 +31,6 @@ export type Edits = {
   editedById: string;
   parentId?: string;
   parent?: PromiseType | null; // Parent promise or null if none
-  promiseId: string;
-  promise: PromiseType; // The promise that was edited
   changes: Record <string, any>; // Stores the changes in JSON format
   createdAt: Date;
 };
@@ -82,9 +78,8 @@ export type UpdatePromiseInput = {
   title?: string;
   description?: string;
   status?: StatusUs;
-  editedById: string;
+  createdBy: string;
   updatedAt: Date;
-  parentId?: string;
 };
 
 export type Query = {

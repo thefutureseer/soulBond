@@ -1,49 +1,51 @@
 generator client {
-  provider = "prisma-client-js" // Generates the Prisma Client for database access
+  provider = "prisma-client-js"
 }
 
 datasource db {
-  provider  = "postgresql" // Specifies PostgreSQL as the database provider
-  url       = env("DATABASE_URL") // Connection string for the database
-  directUrl = env("DIRECT_URL") // Direct URL for connecting to the database, if needed
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
 
 model user {
-  id          String        @id @default(uuid()) // Primary key, using UUIDs for uniqueness
-  name        String // The user's name
-  email       String        @unique // Unique email address for the user
-  edits       editslog[] // One-to-many relationship: A user can make many edits
-  createdAt   DateTime      @default(now()) // Timestamp for when the user was created
-  updatedAt   DateTime      @updatedAt // Automatically updated timestamp for when the user was last updated
+  id          String        @id @default(uuid())
+  name        String
+  email       String        @unique
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  edits       editslog[]
   soulpromise soulpromise[]
 }
 
-// soulPromise model: original and current promise made 
 model soulpromise {
-  id                 String    @id @default(uuid()) // Primary key
-  title              String // Title of the promise
-  description        String // Description or content of the promise edit
-  version            Int       @default(0) // Version number of this edit
-  createdAt          DateTime  @default(now()) // Timestamp for when the promise was created
-  status             status_us @default(PENDING) // Using enum for better validation
-  createdById        String? // Foreign key linking to user
-  createdBy          user?     @relation(fields: [createdById], references: [id]) // Many-to-one relationship with user
-  updatedAt          DateTime   @updatedAt                // Automatically updated timestamp for the last update
-  edits              editslog[]   @relation("SoulpromiseEdits") 
+  id          String     @id @default(uuid())
+  title       String
+  description String
+  version     Int        @default(0)
+  createdAt   DateTime   @default(now())
+  status      status_us  @default(PENDING)
+  createdById String?
+  updatedAt   DateTime   @updatedAt
+  edits       editslog[] @relation("SoulpromiseEdits")
+  createdBy   user?      @relation(fields: [createdById], references: [id])
 }
 
-// Stores separate representations of the soulpromise history/versions of document edits.
 model editslog {
-  id               String       @id @default(uuid())
-  editedBy         user         @relation(fields: [editedByUserId], references: [id]) // Many-to-one relationship tracks user who made specific edits
-  editedByUserId   String // Foreign key linking to user
-  parentId         String
-  parent           soulpromise  @relation("SoulpromiseEdits", fields: [parentId], references: [id], onDelete: Cascade, map: "edits_promiseId_fkey") // Required relation to promise
-  changes          Json? // Stores the changes in JSON format
-  createdAt        DateTime     @default(now())
+  id             String      @id @default(uuid())
+  editedByUserId String
+  parentId       String
+  changes        Json?
+  createdAt      DateTime    @default(now())
+  parent         soulpromise @relation("SoulpromiseEdits", fields: [parentId], references: [id], onDelete: Cascade, map: "edits_promiseId_fkey")
+  editedBy       user        @relation(fields: [editedByUserId], references: [id])
 }
 
-// Enum for status
+model test_table {
+  id   Int     @id
+  name String?
+}
+
 enum status_us {
   PENDING
   COMPLETED

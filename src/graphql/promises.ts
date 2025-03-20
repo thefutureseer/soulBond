@@ -53,12 +53,6 @@ export const GET_PROMISE = gql`
       status
       createdAt
       updatedAt
-      editedById
-      editedBy {
-        id
-        name
-        email
-      }
       edits(offset: $offset, limit: $limit) {
           id
           title

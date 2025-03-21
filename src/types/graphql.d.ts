@@ -20,6 +20,7 @@ export type PromiseType = {
   description: string;
   edits: Edits[]; // Array of related promises
   version: number;
+  createdById: string;
   createdAt: Date;
   updatedAt: Date;
   status: StatusUs; // Enum value for status
@@ -69,6 +70,7 @@ export type CreatePromiseInput = {
   input: {
     title: string;        // Title of the promise
     description: string;  // Description of the promise
+    createdById: string;  // ID of the user who created the promise
     version: number;
     status: StatusUs;
   };

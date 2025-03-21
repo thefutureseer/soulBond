@@ -14,7 +14,7 @@ const isPromiseType = (soulpromise: any): soulpromise is PromiseType => {
 const PromiseForm = () => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
-  const [editedById, setEditedById] = useState('');
+  const [createdById, setcreatedById] = useState('');
   const [version, setVersion] = useState(1); //default first version
   const [status, setStatus] = useState("PENDING"); //default first status
   const [errorMessage, setErrorMessage] = useState('');
@@ -42,7 +42,7 @@ const PromiseForm = () => {
       setSuccessMessage('Promise created successfully!');
       setTitle('');
       setDescription('');
-      setEditedById('');
+      setcreatedById('');
       setVersion(1);
       setStatus('PENDING');
       setErrorMessage('');
@@ -55,7 +55,7 @@ const PromiseForm = () => {
 
   const handleSubmit = useCallback((e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const userId = editedById || "123e4567-e89b-12d3-a456-426614174000";
+    const userId = createdById || "123e4567-e89b-12d3-a456-426614174000";
 
     if (!title || !description || !userId) {
       setErrorMessage('Please fill in all fields');
@@ -73,19 +73,19 @@ const PromiseForm = () => {
       console.error(`Invalid status value: ${status}`);
       return;
     }
-    // console.log("variables", title, description, editedById, version, status);
+    // console.log("variables", title, description, createdById, version, status);
 
     // Call createPromise with the correct structure.
-    createPromise({ variables: { input: { title, description, editedById: userId, version, status:mappedStatus } } });
-  }, [title, description, editedById, version, status, createPromise]);
+    createPromise({ variables: { input: { title, description, createdById: userId, version, status:mappedStatus } } });
+  }, [title, description, createdById, version, status, createPromise]);
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-4">
       <input 
         type="text" 
         placeholder='using false id: 123e4567-e89b-12d3-a456-426614174000'
-        value={editedById} 
-        onChange={(e) => setEditedById(e.target.value)} 
+        value={createdById} 
+        onChange={(e) => setcreatedById(e.target.value)} 
         className="p-2 border rounded"
       />
       <input 

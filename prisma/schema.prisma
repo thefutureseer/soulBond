@@ -22,13 +22,13 @@ model soulpromise {
   id          String     @id @default(uuid())
   title       String
   description String
-  version     Int        @default(0)
+  version     Int        @default(1)
   createdAt   DateTime   @default(now())
   status      status_us  @default(PENDING)
-  createdById String?
+  createdById String
   updatedAt   DateTime   @updatedAt
   edits       editslog[] @relation("SoulpromiseEdits")
-  createdBy   user?      @relation(fields: [createdById], references: [id])
+  createdBy   user      @relation(fields: [createdById], references: [id], onDelete: Cascade)
 }
 
 model editslog {

@@ -1,0 +1,8 @@
+SELECT 1;
+
+CREATE TABLE  test_TABLE(
+  id INT PRIMARY KEY,
+  name TEXT
+);  
+
+INSERT INTO test_TABLE (id, name) VALUES (1, 'HELLO WRLD');

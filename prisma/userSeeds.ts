@@ -8,23 +8,11 @@ async function main() {
   const userData = [
 
     {
-      name: "Jane Smith",
-      email: "1jane.smith@example.com",
+      name: "John V",
+      email: "1john.v@example.com",
       createdAt: new Date(),
       updatedAt: new Date(),
-    },
-    {
-      name: "Samuel Lee",
-      email: "1samuel.lee@example.com",
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-    {
-      name: "Alex Kim",
-      email: "1alex.kim@example.com",
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
+    }
 
   ];
 

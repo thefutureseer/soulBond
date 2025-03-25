@@ -13,7 +13,8 @@ const typeDefs = gql`
     id: ID!
     name: String!
     email: String!
-    edits: [PromiseType!]! # Promises edited by this user
+    edits: [PromiseType] # Promises edited by this user
+    editslog: [EditType] # edits by this user
     createdAt: String!
     updatedAt: String!
   }
@@ -22,8 +23,6 @@ const typeDefs = gql`
     id: ID!
     title: String!
     description: String!
-    editedBy: User!          # User who last edited this promise
-    editedById: ID!      # ID  IDuser who last edited
     edits(offset: Int, limit: Int): [PromiseType!]!   # Promises edited by this promise
     version: Int!
     createdAt: String!
@@ -31,7 +30,15 @@ const typeDefs = gql`
     status: StatusUs!
     parentId: ID             # ID of the parent promise
     parent: PromiseType      # Parent promise
-  
+    createdBy: User           # User who edited the promise
+    createdById: ID           # ID of the user who edited the promise
+  }
+
+  type EditType {
+    id: ID!
+    editedBy: User!
+    parentId: ID             # ID of the parent promise
+    parent: PromiseType      # Parent promise
   }
 
   input CreateUserInput {
@@ -42,7 +49,6 @@ const typeDefs = gql`
   input CreatePromiseInput {
     title: String!
     description: String!
-    editedById: ID! # ID  IDuser creating the promise
     version: Int!       # Version of the promise
     status: StatusUs!   # Status of the promise
   }
@@ -51,7 +57,6 @@ const typeDefs = gql`
     title: String
     description: String
     status: StatusUs
-    editedById: ID!
     updatedAt: String
     parentId: ID
   }

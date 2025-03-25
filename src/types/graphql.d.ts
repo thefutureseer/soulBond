@@ -18,7 +18,7 @@ export type PromiseType = {
   id: string;
   title: string;
   description: string;
-  edits: Edits[]; // Array of related promises
+  edits?: Edits[]; // Array of related promises
   version: number;
   createdById: string;
   createdAt: Date;

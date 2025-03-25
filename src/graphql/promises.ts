@@ -8,12 +8,12 @@ export const CREATE_PROMISE = gql`
       id
       title
       description
-      editedBy {
+      createdBy {
         id
         name
         email
       }
-      editedById
+      createdById
       version
       createdAt
       updatedAt
@@ -29,11 +29,11 @@ export const GET_PROMISES = gql`
       id
       title
       description
-      editedBy {
+      createdBy {
         id
         name
       }
-      editedById
+      createdById
       version
       createdAt
       updatedAt
@@ -81,7 +81,7 @@ export const UPDATE_PROMISE = gql`
       title
       description
       status
-      editedById
+      createdById
       version
       createdAt
       updatedAt

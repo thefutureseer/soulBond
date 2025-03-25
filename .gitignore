@@ -16,6 +16,11 @@
 # production
 /build
 
+.csv
+/prisma/soulPromiseSeed.ts
+/prisma/userSeeds.ts
+/prisma/editLogseeds.ts
+
 # misc
 .DS_Store
 *.pem

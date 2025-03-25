@@ -29,6 +29,6 @@
       "ui/*": ["src/ui/*"],
     }
   },
-  "include": ["src","next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
+  "include": ["src","next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "prisma/"],
   "exclude": ["node_modules", "dist"]
 }

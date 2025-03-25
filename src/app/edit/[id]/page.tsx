@@ -14,7 +14,7 @@ const EditButtonForm: React.FC<EditButtonFormProps> = ({ params }) => {
   const [status, setStatus] = useState(''); // State for the status
   const [updatedAt, setCreated] = useState(''); // State for the updated at timestamp
   const [message, setMessage] = useState(''); // State for the message (error or success)
-  const [editedById, setEditedById] = useState(''); // State for the edited by user ID
+  const [createdById, setEditedById] = useState(''); // State for the edited by user ID
   const [edits, setEdits]= useState<PromiseType[]>([]); // State for the edits
   const [parentId, setParentId] = useState(''); // State for the parent ID  
   const [offset, setOffset] = useState(0); // State for the offset of pagination
@@ -43,7 +43,7 @@ const EditButtonForm: React.FC<EditButtonFormProps> = ({ params }) => {
       setDescription(data.getPromise.description);
       setStatus(data.getPromise.status);
       setCreated(data.getPromise.updatedAt);
-      setEditedById(data.getPromise.editedById);
+      setEditedById(data.getPromise.createdById);
       setEdits(data.getPromise.edits);
       setParentId(data.getPromise.parent?.id || ''); // Set parent ID
     }
@@ -60,7 +60,7 @@ const EditButtonForm: React.FC<EditButtonFormProps> = ({ params }) => {
             title,
             description,
             status,
-            editedById: "123e4567-e89b-12d3-a456-426614174000", // Hardcoded user ID for now
+            createdById: "123e4567-e89b-12d3-a456-426614174000", // Hardcoded user ID for now
             updatedAt: new Date().toISOString(),
             parentId: parentId, // Set parent ID 
           }
@@ -102,7 +102,7 @@ const EditButtonForm: React.FC<EditButtonFormProps> = ({ params }) => {
       <form onSubmit={handleSubmit} className={styles.form}>
         <div className="mb-4">
           <label className={styles.label}>Edited by user ID:</label>
-          <p className="text-gray-900">{editedById}</p>
+          <p className="text-gray-900">{createdById}</p>
         </div>
         <div className="mb-4">
           <label className={styles.label}>Title:</label>

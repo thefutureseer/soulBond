@@ -39,6 +39,7 @@ const EditButtonForm: React.FC<EditButtonFormProps> = ({ params }) => {
   // Update the state with the fetched promise data
   useEffect(() => {
     if (data?.getPromise) {
+      console.log("this is data.getPromise.edits", data.getPromise.edits);  
       setTitle(data.getPromise.title);
       setDescription(data.getPromise.description);
       setStatus(data.getPromise.status);
@@ -172,8 +173,8 @@ const EditButtonForm: React.FC<EditButtonFormProps> = ({ params }) => {
         {
          edits.length > 0 ? (
           edits.map((edit) => (
-            console.log("this is .edit full & .edits 165 ",  edit ),
-            console.log("this is .edit.edits 165 ",  edit.edits ),
+            console.log("this is .edit full version & .edits 175 ",  edit.version ),
+            console.log("this is .edit.edits 176 ",  edit.edits ),
             <div key={edit.id} className="mb-4 p-4 border rounded">
               <h4 className="text-lg font-semibold">Version {edit.version}</h4>
               <p>{edit.title}</p>
@@ -191,7 +192,7 @@ const EditButtonForm: React.FC<EditButtonFormProps> = ({ params }) => {
             </div>
           
           ))
-        ) : ( console.log("this is edits type", typeof edits ), 
+        ) : ( console.log("this is edits length", edits.length ), 
 
               <p>No edits found.</p>  
             )

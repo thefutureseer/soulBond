@@ -28,11 +28,9 @@ export type PromiseType = {
 
 export type Edits = {
   id: string;
-  editedBy: User; // User who made the edit
-  editedById: string;
-  parentId?: string;
-  parent?: PromiseType | null; // Parent promise or null if none
-  changes: Record <string, any>; // Stores the changes in JSON format
+  editedByUserId: string;
+  parentId: string;
+  changes: JsonValue; // Allow JsonValue instead of Record<string, any>
   createdAt: Date;
 };
 

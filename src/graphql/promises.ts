@@ -46,30 +46,18 @@ export const GET_PROMISES = gql`
 export const GET_PROMISE = gql`
   query GetPromise($id: ID!, $offset: Int, $limit: Int) {
     getPromise(id: $id) {
+    id
+    title
+    description
+    edits(offset: $offset, limit: $limit) {
       id
-      version
-      title
-      description
-      status
+      changes
       createdAt
-      updatedAt
-      edits(offset: $offset, limit: $limit) {
-          id
-          title
-          description
-          status
-          createdAt 
-          version
-          parentId
-      }
-      parent {
+      editedBy {
         id
-        title
-        description
-        status
-        createdAt
-        updatedAt
+        name
       }
+    }
   }
 }
 `;
@@ -89,3 +77,21 @@ export const UPDATE_PROMISE = gql`
     }
   }
 `;
+
+export const GET_EDITSLOG_FOR_ID = gql`
+  query GetEditsLogForID($parentId: ID!, $offset: Int, $limit: Int) {
+    getEditsLogForID(parentId: $parentId, offset: $offset, limit: $limit) {
+      id
+      title
+      description
+      status
+      createdById
+      version
+      parentId 
+      changes
+      createdAt
+      editedBy {
+        id
+        name
+      }
+    }`

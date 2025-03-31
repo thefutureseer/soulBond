@@ -3,11 +3,11 @@
 import React, { useState, useCallback } from 'react';
 import { useMutation, ApolloCache } from '@apollo/client';
 import { GET_PROMISES, CREATE_PROMISE } from 'graphql/promises';
-import { PromiseType, CreatePromiseResponse, CreatePromiseInput, StatusUs } from 'types/graphql.d';
+import { SoulPromise, CreatePromiseResponse, CreatePromiseInput, StatusUs } from 'types/graphql.d';
 import styles from 'styles/styles.module.css';
 
-// Type guard for PromiseType
-const isPromiseType = (soulpromise: any): soulpromise is PromiseType => {
+// Type guard for SoulPromise
+const isPromiseType = (soulpromise: any): soulpromise is SoulPromise => {
   return soulpromise && typeof soulpromise.id === 'string' && typeof soulpromise.title === 'string';
 };
 
@@ -24,7 +24,7 @@ const PromiseForm = () => {
     update: (cache: ApolloCache<any>, { data }) => {
       if (data?.createPromise && isPromiseType(data.createPromise)) {
         const newPromise = data.createPromise;
-        const existingPromises = cache.readQuery<{ getPromises: PromiseType[] }>({
+        const existingPromises = cache.readQuery<{ getPromises: SoulPromise[] }>({
           query: GET_PROMISES,
         });
 

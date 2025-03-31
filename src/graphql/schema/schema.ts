@@ -2,6 +2,7 @@ import { gql } from 'apollo-server-micro';
 
 // Define type definitions using GraphQL SDL
 const typeDefs = gql`
+  scalar JSON
 
   enum StatusUs {
     PENDING
@@ -13,32 +14,33 @@ const typeDefs = gql`
     id: ID!
     name: String!
     email: String!
-    edits: [PromiseType] # Promises edited by this user
-    editslog: [EditType] # edits by this user
+    edits: [SoulPromise] # Promises edited by this user
+    editslog: [EditsLog] # edits by this user
     createdAt: String!
     updatedAt: String!
   }
 
-  type PromiseType {
+  type SoulPromise {
     id: ID!
     title: String!
     description: String!
-    edits(offset: Int, limit: Int): [PromiseType!]!   # Promises edited by this promise
+    edits(offset: Int, limit: Int): [EditsLog]   # Promises edited by this promise
     version: Int!
     createdAt: String!
     updatedAt: String!
     status: StatusUs!
-    parentId: ID             # ID of the parent promise
-    parent: PromiseType      # Parent promise
     createdBy: User           # User who edited the promise
     createdById: ID           # ID of the user who edited the promise
   }
 
-  type EditType {
+  type EditsLog {
     id: ID!
     editedBy: User!
     parentId: ID             # ID of the parent promise
-    parent: PromiseType      # Parent promise
+    parent: SoulPromise      # Parent promise
+    changes: JSON
+    createdAt: String!
+    updatedAt: String!
   }
 
   input CreateUserInput {
@@ -64,15 +66,15 @@ const typeDefs = gql`
   type Query {
     getUsers: [User]!
     getUser(id: ID!): User
-    getPromises: [PromiseType]
-    getPromise(id: ID!): PromiseType
+    getPromises: [SoulPromise]
+    getPromise(id: ID!): SoulPromise
     testQuery: String
   }
 
   type Mutation {
     createUser(input: CreateUserInput!): User!
-    createPromise(input: CreatePromiseInput!): PromiseType!
-    updatePromise(id: ID!, input: UpdatePromiseInput!): PromiseType
+    createPromise(input: CreatePromiseInput!): SoulPromise!
+    updatePromise(id: ID!, input: UpdatePromiseInput!): SoulPromise
   }
 `;
 

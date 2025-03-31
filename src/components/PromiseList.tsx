@@ -3,7 +3,7 @@
 import React from 'react';
 import { useQuery, useApolloClient } from '@apollo/client';
 import { GET_PROMISES } from 'graphql/promises';
-import { PromiseType, GetPromisesQueryResult } from 'src/types/graphql';
+import { SoulPromise, GetPromisesQueryResult } from 'src/types/graphql';
 import { format, isValid } from 'date-fns';
 import { statusColors } from 'ui/statusColors';
 
@@ -24,7 +24,7 @@ const PromiseList: React.FC = () => {
   return (
     <div>
       {data?.getPromises?.length ? (
-        (data.getPromises ?? []).map((soulpromise: PromiseType) => (
+        (data.getPromises ?? []).map((soulpromise: SoulPromise) => (
           <div key={soulpromise.id} className="mb-4 p-4 border rounded">
             <h3 className="text-xl font-semibold">{soulpromise.title}</h3>
             <p>{soulpromise.description}</p>

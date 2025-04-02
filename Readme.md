@@ -1,9 +1,9 @@
-## Promise Management App
+## Promise Management S.A.S. App
 # SoulBond
 "Just keep your promise."
 
 ## Overview
-The **Promise Management App** is a full-stack web application built with **Next.js, Apollo Client, and GraphQL**, using **Prisma and PostgreSQL** as the backend. This app allows users to create, edit, and track promises while maintaining version control and status updates.
+The **Promise Management S.A.S. App** is a full-stack web application built with **Next.js, Apollo Client, and GraphQL**, using **Prisma and PostgreSQL** as the backend. This app allows users to create, edit, and track promises while maintaining version control and status updates.
 
 ## Features
 - **Create & Edit Promises** – Users can add, modify, and update promises.

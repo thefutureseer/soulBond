@@ -15,7 +15,7 @@ const PromiseForm = () => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [createdById, setcreatedById] = useState('');
-  const [version, setVersion] = useState(1); //default first version
+  // const [version, setVersion] = useState(); //default first version
   const [status, setStatus] = useState("PENDING"); //default first status
   const [errorMessage, setErrorMessage] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
@@ -43,7 +43,6 @@ const PromiseForm = () => {
       setTitle('');
       setDescription('');
       setcreatedById('');
-      setVersion(1);
       setStatus('PENDING');
       setErrorMessage('');
     },
@@ -76,8 +75,8 @@ const PromiseForm = () => {
     // console.log("variables", title, description, createdById, version, status);
 
     // Call createPromise with the correct structure.
-    createPromise({ variables: { input: { title, description, createdById: userId, version, status:mappedStatus } } });
-  }, [title, description, createdById, version, status, createPromise]);
+    createPromise({ variables: { input: { title, description, createdById: userId, status:mappedStatus } } });
+  }, [title, description, createdById, status, createPromise]);
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-4">

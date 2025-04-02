@@ -95,7 +95,7 @@ const PromiseForm = () => {
         className="p-2 border rounded"
       />
       <textarea 
-        placeholder="Promise description of souls" 
+        placeholder="Promise description of soul bond" 
         value={description} 
         onChange={(e) => setDescription(e.target.value)} 
         className={`${styles['responsive-textarea']} p-2 border rounded`}       

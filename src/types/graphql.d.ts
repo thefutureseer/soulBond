@@ -29,6 +29,7 @@ export type SoulPromise = {
 
 export type EditsLog = {
   id: string;
+  version: number;
   editedBy: User; // User who edited the promise
   editedByUserId: string;
   parentId: string;
@@ -39,7 +40,7 @@ export type EditsLog = {
 
 // Define the structure of the response for GET_PROMISES
 export interface GetPromisesQueryResult {
-  getPromises: SoulPromise[]; // An array of SoulPromise
+  getPromises: EditsLog[]; // An array of newest edits to SoulPromises
 }
 
 //Edit button
@@ -51,7 +52,7 @@ export interface EditButtonFormProps {
 
 // Type for fetching a single promise
 export type GetPromiseQueryResult = {
-  getPromise: SoulPromise | null; // A single SoulPromise or null if not found
+  getPromise: EditsLog | null; // A single SoulPromise or null if not found
 };
 
 export type CreatePromiseResponse = {
@@ -59,7 +60,7 @@ export type CreatePromiseResponse = {
 };
 
 export type UpdatePromiseResponse = {
-  updatePromise: SoulPromise; // The promise that was updated
+  updatePromise: EditsLog; // The promise that was updated
 };
 
 export type CreateUserInput = {
@@ -72,7 +73,6 @@ export type CreatePromiseInput = {
     title: string;        // Title of the promise
     description: string;  // Description of the promise
     createdById: string;  // ID of the user who created the promise
-    version: number;
     status: StatusUs;
   };
 };
@@ -83,17 +83,23 @@ export type UpdatePromiseInput = {
   status?: StatusUs;
   createdBy: string;
   updatedAt: Date;
+  changes: {
+    title: string;
+    description: string;
+    status: StatusUs;
+    version: number;
+  };
 };
 
 export type Query = {
   getUsers: User[]; // Fetches an array of users
   getUser: (id: string) => User | null; // Fetch a single user by ID
-  getPromises: SoulPromise[]; // Fetches an array of promises
-  getPromise: (id: string) => SoulPromise | null; // Fetch a single promise by ID
+  getPromises: EditsLog[]; // Fetches an array of promises
+  getPromise: (id: string) => EditsLog | null; // Fetch a single promise by ID
 };
 
 export type Mutation = {
   createUser: (input: CreateUserInput) => User; // Create a new user
   createPromise: (input: CreatePromiseInput) => SoulPromise; // Create a new promise
-  updatePromise: (input: UpdatePromiseInput) => SoulPromise; // Update an existing promise
+  updatePromise: (input: UpdatePromiseInput) => EditsLog; // Update an existing promise
 };

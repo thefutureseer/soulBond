@@ -35,9 +35,11 @@ const typeDefs = gql`
 
   type EditsLog {
     id: ID!
+    version: Int!           # Version of the promise
     editedBy: User!
+    editedByUserId: ID      # ID of the user who edited the promise
     parentId: ID             # ID of the parent promise
-    parent: SoulPromise      # Parent promise
+    parent: SoulPromise      # Full parent promise
     changes: JSON
     createdAt: String!
     updatedAt: String!
@@ -66,8 +68,8 @@ const typeDefs = gql`
   type Query {
     getUsers: [User]!
     getUser(id: ID!): User
-    getPromises: [SoulPromise]
-    getPromise(id: ID!): SoulPromise
+    getPromises: [EditsLog]!
+    getPromise(id: ID!): EditsLog
     testQuery: String
   }
 
@@ -76,6 +78,6 @@ const typeDefs = gql`
     createPromise(input: CreatePromiseInput!): SoulPromise!
     updatePromise(id: ID!, input: UpdatePromiseInput!): SoulPromise
   }
-`;
+`
 
 export default typeDefs;

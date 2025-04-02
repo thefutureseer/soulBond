@@ -27,17 +27,11 @@ export const GET_PROMISES = gql`
   query GetPromises {
     getPromises {
       id
-      title
-      description
-      createdBy {
-        id
-        name
-      }
-      createdById
       version
+      changes # JSON changes made to the promise
       createdAt
-      updatedAt
-      status
+      parentId
+      editedByUserId
     }
   }
 `;
@@ -55,7 +49,7 @@ export const GET_PROMISE = gql`
       createdAt
       editedBy {
         id
-        name
+        # name
       }
     }
   }
@@ -78,9 +72,9 @@ export const UPDATE_PROMISE = gql`
   }
 `;
 
-export const GET_EDITSLOG_FOR_ID = gql`
-  query GetEditsLogForID($parentId: ID!, $offset: Int, $limit: Int) {
-    getEditsLogForID(parentId: $parentId, offset: $offset, limit: $limit) {
+export const GET_EDITSLOG_WITH_THIS_ID = gql`
+  query GetEditsLogForPromise($parentId: ID!, $offset: Int, $limit: Int) {
+    getEditsLogForPromise(parentId: $parentId, offset: $offset, limit: $limit) {
       id
       title
       description
@@ -94,4 +88,5 @@ export const GET_EDITSLOG_FOR_ID = gql`
         id
         name
       }
-    }`
+    }
+  }`;

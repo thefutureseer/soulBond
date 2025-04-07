@@ -1,7 +1,7 @@
-import { PrismaClient } from '@prisma/client';
-// import { version } from 'os';
+import prisma from 'utils/prisma'; // Import Prisma client for database operations
 import { Context } from 'src/types/context'; // Import types for context (includes Prisma and more)
 import { StatusUs, CreatePromiseInput, SoulPromise, EditsLog } from 'src/types/graphql.d'; // Import custom types for GraphQL
+import { Prisma, PrismaClient } from '@prisma/client';
 
 //Set up context, parent, and info for resolvers
 const withPrisma = (resolver: Function) => async (parent: any, args: any, context: Context, info: any) => {
@@ -14,19 +14,22 @@ const resolvers: any = {
   Query: {
   
     //WITHOUT EDITS Fetch all UP TO DATE VERSION promises (SoulPromise) with associated user data
-    getPromises: withPrisma(async (_: unknown, __: unknown, prisma: PrismaClient) => {
+    getPromises: withPrisma(async (_: unknown, __: unknown, prisma: PrismaClient ) => {
       try {
         const getEdits = await prisma.editslog.findMany({
+          include: {
+            editedBy: true, // Include user who edited the promise
+            parent: true, // Include parent promise info
+          },
           orderBy: [
-            { parentId: 'asc' }, // Order by parentId in descending order
-            { version: 'desc' }, // Take each parent and Order edits by version # in descending order
+            { id: 'asc' }, // Order by parentId in descending order
           ]
         });
 
         const latestEdits = Object.values(
           getEdits.reduce((accu, edit) => {
-            if (!accu[edit.parentId]){
-              accu[edit.parentId] = edit; 
+            if (!accu[edit.id]){
+              accu[edit.id] = edit; 
             }// Keep the latest edit for each parentId)
           return accu;
           }, {} as Record<string, typeof getEdits[0]>)
@@ -36,8 +39,7 @@ const resolvers: any = {
         console.error("Error fetching latest soulpromises from editslog: ", error);
         throw new Error(`Failed to fetch latest promises from edits log: ${error}`);
       }
-    })
-    ,
+    }),
     // Fetch a specific promise by ID
     getPromise: withPrisma(async (_: unknown, { id }: { id: string }, prisma: PrismaClient) => {
       return await prisma.editslog.findUnique({
@@ -58,6 +60,11 @@ const resolvers: any = {
     createPromise: async (_: unknown, { input }: { input: CreatePromiseInput }, context: Context) => {
       const { prisma } = context;
 
+      console.log("Received input:", input, " and x2 ", input.input); // Log the input object
+
+      // if (!input || !input.title || !in.input.description || !input.createdById) {
+      //   throw new Error("Invalid input: input is undefined or malformed");
+      // }
       //1) create a new promise to the database as the parent of all parents
       const soulPromise = await prisma.soulpromise.create({
         data: {
@@ -68,19 +75,18 @@ const resolvers: any = {
       });
 
       //2) create a new edit log for the promise at the same time as the first soulpromise
-      await prisma.editslog.create({
+      const editsLog = await prisma.editslog.create({
         data: {
-          version: 1,
-          parentId: soulPromise.id,
+          parentId: soulPromise.id, //Get ID of the parent promise 
           editedByUserId: input.input.createdById,
           changes: {
-            title: input.input.title,
-            description: input.input.description, 
-            status: StatusUs.PENDING,
+            title: soulPromise.title,
+            description: input.input.description,
+            updatedAt: new Date().toISOString(),
           },
         },
       });
-      return soulPromise; // Return the created promise
+      return editsLog; // Return the created editslog from db 
     }
   },
 

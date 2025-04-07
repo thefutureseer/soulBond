@@ -2,8 +2,9 @@
 
 import React, { useState, useCallback } from 'react';
 import { useMutation, ApolloCache } from '@apollo/client';
-import { GET_PROMISES, CREATE_PROMISE } from 'graphql/promises';
-import { SoulPromise, CreatePromiseResponse, CreatePromiseInput, StatusUs } from 'types/graphql.d';
+import { GET_PROMISES } from 'graphql/editslog/queries';
+import { CREATE_PROMISE } from 'graphql/soulpromises/mutations';
+import { SoulPromise, CreatePromiseResponse, CreatePromiseInput, EditsLog } from 'types/graphql.d';
 import styles from 'styles/styles.module.css';
 
 // Type guard for SoulPromise
@@ -15,16 +16,14 @@ const PromiseForm = () => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [createdById, setcreatedById] = useState('');
-  // const [version, setVersion] = useState(); //default first version
-  const [status, setStatus] = useState("PENDING"); //default first status
   const [errorMessage, setErrorMessage] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
 
   const [createPromise, { loading }] = useMutation<CreatePromiseResponse, CreatePromiseInput>(CREATE_PROMISE, {
     update: (cache: ApolloCache<any>, { data }) => {
-      if (data?.createPromise && isPromiseType(data.createPromise)) {
+      if (data?.createPromise) {
         const newPromise = data.createPromise;
-        const existingPromises = cache.readQuery<{ getPromises: SoulPromise[] }>({
+        const existingPromises = cache.readQuery<{ getPromises: EditsLog[] }>({
           query: GET_PROMISES,
         });
 
@@ -42,8 +41,7 @@ const PromiseForm = () => {
       setSuccessMessage('Promise created successfully!');
       setTitle('');
       setDescription('');
-      setcreatedById('');
-      setStatus('PENDING');
+      setcreatedById('');      
       setErrorMessage('');
     },
     onError: (err) => {
@@ -64,19 +62,11 @@ const PromiseForm = () => {
     setErrorMessage(''); // Clear previous errors
     setSuccessMessage(''); // Clear previous success messages
     
-    // Validate or map the string status to the StatusUs enum.
-    const mappedStatus = StatusUs[status as keyof typeof StatusUs]; 
-    
-    //if `mappedStatus` is not a valid enum value.
-    if (!mappedStatus) {
-      console.error(`Invalid status value: ${status}`);
-      return;
-    }
-    // console.log("variables", title, description, createdById, version, status);
+    console.log("variables from form values: ", { title, description, userId});
 
     // Call createPromise with the correct structure.
-    createPromise({ variables: { input: { title, description, createdById: userId, status:mappedStatus } } });
-  }, [title, description, createdById, status, createPromise]);
+    createPromise({ variables: { input: { title, description, createdById: userId } } });
+  }, [title, description, createdById, createPromise]);
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-4">

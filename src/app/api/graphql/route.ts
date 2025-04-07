@@ -5,7 +5,7 @@ import { InMemoryLRUCache } from '@apollo/utils.keyvaluecache';
 import { makeExecutableSchema } from '@graphql-tools/schema';
 import resolvers from 'graphql/resolvers';
 import typeDefs from 'graphql/schema';
-import prisma from 'src/utils/prisma';
+import prisma from 'utils/prisma';
 import { Context } from 'src/types/context';
 import { ApolloServerPluginLandingPageGraphQLPlayground } from "@apollo/server-plugin-landing-page-graphql-playground";
 

@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { useQuery, useApolloClient } from '@apollo/client';
-import { GET_PROMISES } from 'graphql/promises';
+import { GET_PROMISES } from 'graphql/editslog';
 import { EditsLog, GetPromisesQueryResult } from 'src/types/graphql';
 import { format, isValid } from 'date-fns';
 import { statusColors } from 'ui/statusColors';
@@ -10,6 +10,9 @@ import { statusColors } from 'ui/statusColors';
 const PromiseList: React.FC = () => {
   const client = useApolloClient(); // Access Apollo Client
   const { loading, error, data } = useQuery<GetPromisesQueryResult>(GET_PROMISES);
+  console.log("Loading:", loading);
+  console.log("Error:", error);
+  console.log("Data:", data);
 
   const handleEdit = (id: string) => {
     // Reset store before navigating to the edit page

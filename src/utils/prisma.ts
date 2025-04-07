@@ -7,8 +7,12 @@ const globalForPrisma = global as unknown as { prisma?: PrismaClient };
 
 // Create a new PrismaClient instance if one does not already exist in the global scope.
 // This prevents unnecessary database connections when the server restarts in development mode.
-export const prisma = globalForPrisma.prisma ?? new PrismaClient();
-
+export const prisma =
+  globalForPrisma.prisma ||
+  new PrismaClient({
+    log: ['query', 'info', 'warn', 'error'], // Enable logging for debugging
+  });
+  
 // If the app is NOT running in production, store the Prisma instance in the global object.
 // This ensures that the Prisma client persists across hot module reloads in development,
 // preventing multiple instances from being created and leading to potential connection issues.

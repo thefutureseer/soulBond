@@ -9,20 +9,17 @@ export const PromiseFields = gql`
     version
     createdAt
     updatedAt
-    parentId
-  }
+    status}
 `;
 
-export const EditsLogFields = gql`
-  fragment EditsLogFields on EditsLog {
+export const SoulPromiseEditsLogFields = gql`
+  fragment SoulPromiseEditsLogFields on EditsLog {
     id
     title
     description
     status
     createdById
     version
-    parentId
-    changes
     createdAt
     editedBy {
       id

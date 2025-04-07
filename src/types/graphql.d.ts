@@ -73,7 +73,6 @@ export type CreatePromiseInput = {
     title: string;        // Title of the promise
     description: string;  // Description of the promise
     createdById: string;  // ID of the user who created the promise
-    status: StatusUs;
   };
 };
 
